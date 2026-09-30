@@ -65,7 +65,17 @@ if ! command -v incus >/dev/null 2>&1; then
     apt-get install -y -qq incus
 fi
 
+need_init=0
 if ! incus list >/dev/null 2>&1; then
+    need_init=1
+elif ! incus storage list --format csv -c n 2>/dev/null | grep -q .; then
+    # `incus list` sozlanmagan holatda ham muvaffaqiyatli (bo'sh ro'yxat)
+    # qaytishi mumkin -- haqiqiy belgi: birorta ham storage pool yo'qligi
+    # (bunda konteyner yaratish "No root device could be found" bilan
+    # muvaffaqiyatsiz tugaydi).
+    need_init=1
+fi
+if [[ "$need_init" -eq 1 ]]; then
     echo "incus hali sozlanmagan -- avtomatik init qilinmoqda..."
     incus admin init --auto
 fi
