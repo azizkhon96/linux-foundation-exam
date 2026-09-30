@@ -1,5 +1,26 @@
 # Linux Foundation kursi -- imtihon skripti
 
+## Joylashtirish: ikkita usul bor
+
+**Tavsiya etiladi: `provision_containers.sh`** -- har talaba uchun ALOHIDA,
+to'liq izolyatsiyalangan LXD/incus konteyner (systemd+cron+apt bilan, kichik
+VM kabi) yaratadi. Bitta VM ichida ko'p talaba bo'lganda `/tmp`, `/etc/passwd`,
+o'rnatilgan paketlar, `crontab -u root` kabi GLOBAL narsalar talabalar
+o'rtasida ARALASHIB ketishi mumkin edi (bitta talabaning ishi boshqasining
+hisobiga yozilib qolishi) -- konteynerlar buni butunlay yo'qotadi.
+
+```bash
+sudo apt install incus      # birinchi marta (skript o'zi ham o'rnatadi)
+sudo ./provision_containers.sh -n 15
+```
+
+Batafsil: "Talabalar uchun konteyner muhitini yaratish" bo'limiga qarang.
+
+**Eski usul: `provision_students.sh`** -- bitta VM ichida har talaba uchun
+alohida Linux user yaratadi (`/home/user1`, `/home/user2`, ...). Oddiyroq,
+lekin yuqoridagi kontaminatsiya muammosiga ega. Faqat juda cheklangan
+resurs (konteyner ishga tushirib bo'lmaydigan VM) holatida ishlatilsin.
+
 ## Qanday ishlaydi (qisqacha)
 
 1. Talaba SSH orqali VM ga kiradi, `./module1` ni ishga tushiradi.
@@ -24,10 +45,10 @@
 ## Nega bunday qurildi (asosiy dizayn qarorlari)
 
 - **Komanda matni emas, tizim holati tekshiriladi.** Eski skript `~/.bash_history`ning oxirgi qatorini o'qib, uni aniq matn bilan solishtirar edi -- bu shell-injection, quoting va "faqat bitta to'g'ri yozilish shakli" muammolarini keltirib chiqargan edi. Yangi versiyada har bir savol **natijani** tekshiradi (fayl bormi, ruxsat to'g'rimi, user yaratilganmi va h.k.) -- shuning uchun turlicha, lekin to'g'ri yozilgan komandalar ham qabul qilinadi.
-- **Faqat ekranga chiqaradigan (`pwd`, `tree`, `ls -la /run`, `find`, `w`, `ps|grep`, `systemctl status`) savollar natijani faylga yozishni talab qiladi** (`~/javoblar/N.txt`), chunki holat-asosidagi tekshiruv uchun biror "iz" qolishi kerak. Ba'zi javoblar (masalan `find /etc -name os-release`) instruktor tomonidan **live** qayta ishga tushirilib solishtiriladi; boshqalari (masalan `/run` yoki `ps`) doimo o'zgarib turgani uchun struktura bo'yicha tekshiriladi.
-- **14/15-savollar endi ikkita alohida faylda** (`~/my-file`, `~/my-file2`) -- eski versiyada ikkalasi ham bitta faylga chmod qilar edi, shuning uchun 15-savol 14-ni "yozib yuborar" edi.
-- **19-savol** (`crontab -e`) endi aniq bitta yozuv qo'shishni talab qiladi -- shunchaki `crontab -e`ni ochib yopish hech narsani o'zgartirmaydi, tekshirish uchun aniq natija kerak.
-- **20-savol** endi **dinamik PID** bilan ishlaydi -- har talaba uchun skript o'zi haqiqiy fon jarayon yaratadi va uning PID'ini savol matnida ko'rsatadi, shuning uchun `kill -9 30025` kabi "hech qachon mavjud bo'lmagan PID" muammosi yo'qoladi.
+- **Faqat ekranga chiqaradigan savollar** (`pwd`, `tree`, `apt list`, `find`, `pidof`, `systemctl status`) natijani faylga yozishni talab qiladi (`~/javoblar/N.txt`), chunki holat-asosidagi tekshiruv uchun biror "iz" qolishi kerak. Barqaror natijalar (masalan `find /etc -size +100k`) instruktor tomonidan **live** qayta ishga tushirilib solishtiriladi; o'zgaruvchan/katta natijalar (masalan `apt list`) struktura bo'yicha tekshiriladi.
+- **14/15-savollar endi har biri 3 tadan ALOHIDA fayl** (`perm-a/b/c`, `perm-x/y/z`) -- bir faylni ikki marta chmod qilishning ustma-ust yozilish muammosi yo'q, va materialdagi "bir nechta ruxsat qiymatini bir yo'la bajarish" uslubiga mos.
+- **19-savol** (`crontab`) endi aniq bir haftalik `/etc` backup vazifasini talab qiladi -- shunchaki `crontab -e`ni ochib yopish hech narsani o'zgartirmaydi, tekshirish uchun aniq natija kerak.
+- **20-savol** endi **nomi bilan** ('examdaemon', `killall`/`pkill` orqali) to'xtatishni talab qiladi -- har talaba konteyneri alohida bo'lgani uchun PID shart emas, va bu 17-savoldagi (PID bo'yicha `pidof`) ko'nikmadan farqli, alohida protsess-boshqaruv ko'nikmasini sinaydi. **DIQQAT:** `killall` `psmisc` paketiga tegishli -- konteyner shabloniga (`provision_containers.sh`) kiritilgan, lekin eski (`provision_students.sh`) yo'l bilan VM'ga qo'lda o'rnatish kerak bo'lishi mumkin (`apt install psmisc`).
 - **`submit` faqat bir marta ishlaydi**, holat `~/.exam/module1/state.json`da saqlanadi.
 - **Natija talabaga ko'rinmaydi**, faqat instruktorga (`--grade`). Saqlangan `report.json` HMAC bilan imzolangan (tasodifiy tahrirlashni aniqlash uchun), lekin **haqiqiy, ishonchli baho har doim `--grade` orqali LIVE hisoblanadi** -- talaba root huquqiga ega bo'lishi mumkinligi sababli, faylga to'liq ishonib bo'lmaydi. Diqqat: barcha tekshiruvlar "doimiy holat"ga asoslangani uchun (masalan o'ldirilgan jarayon abadiy o'lik qoladi), `--grade`ni istalgan payt -- hatto imtihondan keyin ham -- qayta ishga tushirish mumkin.
 
@@ -72,7 +93,45 @@ Tekshirilgan: pyarmor 9.2.7 bilan `exam/` paketi + `module1` entry-script birga 
 - **`./build.sh`ni har doim aynan imtihon VM'ining o'zida ishga tushiring** (yoki VM bilan bir xil Python minor-versiyali muhitda). Boshqa mashinada build qilib, faylni ko'chirib qo'yish ISHLAMAYDI.
 - `provision_students.sh` shuni hisobga oladi: agar `dist/` topilmasa, o'zi avtomatik `./build.sh`ni ishga tushiradi -- shu VM'ning python3 va pyarmor'i bilan. Shuning uchun eng oddiy yo'l: manba kodni (`exam/`, `module1`, `build.sh`, `provision_students.sh`) VM'ga ko'chiring, `pip install pyarmor` qiling va to'g'ridan-to'g'ri `provision_students.sh`ni ishga tushiring -- u kerakli build'ni o'zi qiladi.
 
-## Talabalar uchun user muhitini bitta buyruq bilan yaratish
+## Talabalar uchun konteyner muhitini yaratish (tavsiya etiladi)
+
+VM'da manba kod bo'lgach (git clone yoki nusxalash orqali):
+
+```bash
+sudo ./provision_containers.sh -n 15              # talaba1..talaba15
+sudo ./provision_containers.sh ali vali guli       # aniq nomlar bilan
+sudo ./provision_containers.sh -n 10 -p ozod       # ozod1..ozod10
+```
+
+Birinchi ishga tushirishda skript avtomatik ravishda:
+1. `incus` (LXD'ning ochiq hamjamiyat versiyasi) topilmasa o'rnatadi va sozlaydi (`incus admin init --auto`),
+2. **Shablon (golden image)** tayyorlaydi -- bitta konteyner ochib, kerakli paketlarni (`openssh-server`, `tree`, `psmisc`, `cron` -- allaqachon bor) o'rnatadi, `pyarmor` bilan shu KONTEYNERNING o'zida (to'g'ri Python versiyasi bilan) build qiladi, smoke-test qiladi, va `examtpl-module1` nomi bilan saqlaydi. Bu bosqich bir necha daqiqa oladi, lekin **faqat bir marta** bajariladi.
+3. Har bir talaba uchun: shablondan sekundlar ichida yangi konteyner kloni yaratadi, ichida user+parol o'rnatadi, `sudo` guruhiga qo'shadi, SSH orqali kirilganda imtihon avtomatik boshlanadigan qilib sozlaydi, va noyob host-port orqali SSH kirish imkonini ochadi (`incus config device add ... proxy`).
+4. Oxirida `user | parol | port | ulanish-komandasi` jadvalini chiqaradi va `credentials_containers_<sana>.txt` fayliga saqlaydi.
+
+Talaba ulanadi:
+```bash
+ssh talaba1@<VM_IP> -p 2200
+```
+(port har bir talaba uchun individual, 2200 dan boshlab ketma-ket).
+
+**Materiallarni yangilagach** (savol qo'shdingiz yoki `exam/`ni tahrirladingiz):
+```bash
+sudo ./provision_containers.sh --refresh-all       # BARCHA konteynerlar, parol/holatga tegmasdan
+sudo ./provision_containers.sh --refresh user1 user2
+sudo ./provision_containers.sh --rebuild-template -n 0   # shablonni majburan qayta qurish
+```
+
+Instruktor natijani ko'rish uchun konteyner ichiga kiradi:
+```bash
+incus exec talaba1 -- bash -c "HOME=/home/talaba1 python3 /opt/linux-foundation-exam/dist/module1 --grade"
+```
+
+**Nega konteyner, nega oddiy VM-user emas:** ko'p savol GLOBAL tizim holatiga tegadi (`/tmp`, `/etc/passwd`, o'rnatilgan paketlar, root crontab). Bitta VM'da bir nechta Linux user bo'lsa, bir talabaning ishi (masalan `/tmp/file1` yaratishi) boshqa talabaning shu savolini ham "yechilgan" ko'rsatishi mumkin edi -- bu real holatda kuzatilgan va tasdiqlangan muammo. Har biriga alohida konteyner (o'z `/tmp`, `/etc`, userlari, cron'i bilan) buni tag'in yo'qotadi.
+
+**Tekshirilgan:** nested incus muhitida (Ubuntu 24.04, real systemd+cron+python3.12) to'liq oqim -- shablon qurish, talaba yaratish, real SSH login (port-forwarding orqali), va barcha 20 savolga to'g'ri javob bilan 60/60 ball -- tasdiqlangan.
+
+## Talabalar uchun user muhitini bitta buyruq bilan yaratish (eski usul, kontaminatsiya xavfi bilan)
 
 VM tayyor bo'lgach (manba kod VM'ga ko'chirilgan, `pip install pyarmor` qilingan holda):
 
