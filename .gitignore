@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+
+# pyarmor build artefakti -- ./build.sh orqali qayta yaratiladi
+/dist/

@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""
+1-modul imtihon skripti -- kirish nuqtasi.
+
+Ishlatish:
+    ./module1              -- imtihonni boshlash / davom ettirish
+    ./module1 --status      -- topshirilganmi-yo'qmi tekshirish (talaba uchun)
+    ./module1 --submit      -- yakuniy topshirish (odatda 'submit' orqali chaqiriladi)
+    ./module1 --grade       -- LIVE baholash (faqat instruktor uchun)
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from exam.core import Engine
+from exam.module1 import questions
+
+if __name__ == "__main__":
+    Engine("module1", questions.QUESTIONS, questions.setup).main()
