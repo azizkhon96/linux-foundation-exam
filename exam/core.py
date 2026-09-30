@@ -300,4 +300,10 @@ class Engine:
         # chetlanib qoladi (chunki bu jarayon .bash_profile orqali `exec`
         # bilan chaqirilgan -- login shell'ning o'rnini bosgan).
         if os.environ.get("EXAM_NO_EXEC") != "1":
+            # os.execvp() jarayon ta'sirini DARHOL almashtiradi -- agar
+            # stdout tty bo'lmasa (masalan chuqur ichma-ich exec zanjiri),
+            # Python'ning hali flush qilinmagan bufferi shu zahoti yo'qolib
+            # ketadi. Shuning uchun exec'dan oldin har doim flush qilamiz.
+            sys.stdout.flush()
+            sys.stderr.flush()
             os.execvp("bash", ["bash"])
