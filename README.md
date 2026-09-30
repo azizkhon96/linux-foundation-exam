@@ -67,7 +67,32 @@ Natija `dist/` papkasida paydo bo'ladi -- **faqat shu papkani** talabalarga beri
 
 Tekshirilgan: pyarmor 9.2.7 bilan `exam/` paketi + `module1` entry-script birga shifrlanadi, bitta umumiy runtime bilan ishlaydi, va manba matnlari (savollar, fayl nomlari) shifrlangan fayllarda oddiy `grep` bilan topilmaydi.
 
-**Muhim eslatma:** imtihon VM'laridagi Python versiyasini tekshiring va build shu versiyaga mos yoki undan past versiyada qilinganiga ishonch hosil qiling (pyarmor 9.x runtime ko'p Python 3.x versiyalar bilan mos ishlaydi, lekin VM image tayyorlangach bir marta `dist/module1`ni o'sha VM'da sinab ko'rish tavsiya etiladi).
+**MUHIM (tekshirib tasdiqlangan):** pyarmor runtime (`pyarmor_runtime_*.so`) build qilingan Python versiyasiga qat'iy bog'liq -- ular orasida umumiy moslik YO'Q. Masalan Python 3.14'da qilingan build Ubuntu 22.04'ning Python 3.10'ida `ImportError: undefined symbol: PyLongWriter_Discard` xatosi bilan ishlamay qoladi. Shuning uchun:
+
+- **`./build.sh`ni har doim aynan imtihon VM'ining o'zida ishga tushiring** (yoki VM bilan bir xil Python minor-versiyali muhitda). Boshqa mashinada build qilib, faylni ko'chirib qo'yish ISHLAMAYDI.
+- `provision_students.sh` shuni hisobga oladi: agar `dist/` topilmasa, o'zi avtomatik `./build.sh`ni ishga tushiradi -- shu VM'ning python3 va pyarmor'i bilan. Shuning uchun eng oddiy yo'l: manba kodni (`exam/`, `module1`, `build.sh`, `provision_students.sh`) VM'ga ko'chiring, `pip install pyarmor` qiling va to'g'ridan-to'g'ri `provision_students.sh`ni ishga tushiring -- u kerakli build'ni o'zi qiladi.
+
+## Talabalar uchun user muhitini bitta buyruq bilan yaratish
+
+VM tayyor bo'lgach (manba kod VM'ga ko'chirilgan, `pip install pyarmor` qilingan holda):
+
+```bash
+sudo ./provision_students.sh -n 15              # talaba1..talaba15 (avtomatik nomlar)
+sudo ./provision_students.sh ali vali guli       # aniq nomlar bilan
+sudo ./provision_students.sh -n 10 -p ozod       # ozod1..ozod10
+```
+
+Har bir user uchun skript avtomatik ravishda:
+- `useradd -m -s /bin/bash` bilan user yaratadi va `sudo` guruhiga qo'shadi (ko'p savollar root huquqi talab qiladi),
+- oson o'qiladigan/aytiladigan parol generatsiya qiladi (masalan `Gulquyosh88`),
+- shifrlangan imtihon materialini (`dist/`) `~/module1-exam/` ga joylaydi, `root:root` egaligida va faqat o'qish/ishga tushirish huquqi bilan (talaba tekshiruv kodini o'zgartira olmaydi),
+- **SSH orqali kirishning o'zida imtihon avtomatik boshlanadigan** qilib `~/.bash_profile`ga yoziladi -- talaba hech qanday buyruq bilmasdan, shunchaki SSH orqali kirsa, savollar ro'yxatini ko'radi va erkin bashga tushadi.
+- Oxirida barcha `user:parol` juftliklarini ekranga chiqaradi va `credentials_<sana>.txt` fayliga (faqat root o'qiy oladigan, `chmod 600`) saqlaydi.
+
+**Diqqat:**
+- Mavjud (allaqachon yaratilgan) userlar o'tkazib yuboriladi -- xavfsizlik uchun ustidan yozilmaydi.
+- `credentials_*.txt` fayllarini hech qachon git'ga qo'shmang (`.gitignore`da allaqachon istisno qilingan) -- ular parollarni ochiq matnda saqlaydi.
+- SSH serverda `PasswordAuthentication yes` yoqilganligini o'zingiz tekshiring (`/etc/ssh/sshd_config`) -- bu skript uni o'zgartirmaydi, chunki bu butun VM xavfsizligiga tegishli global sozlama.
 
 ## Talab qilinadigan huquqlar
 

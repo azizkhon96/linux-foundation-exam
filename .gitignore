@@ -3,3 +3,6 @@ __pycache__/
 
 # pyarmor build artefakti -- ./build.sh orqali qayta yaratiladi
 /dist/
+
+# talabalar paroli -- hech qachon versiya nazoratiga qo'shilmasin
+credentials_*.txt
