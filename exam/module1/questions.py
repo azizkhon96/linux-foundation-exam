@@ -6,21 +6,22 @@ va Amaliyot-1.txt) so'zma-so'z moslab tuzilgan: fayl tizimi/navigatsiya,
 filtrlar (grep), arxivlash, user/group, ruxsatlar, paket boshqaruvi, find,
 servis, ssh, cron, protsess boshqaruvi.
 
+MUHIM QOIDA: savol matnida hech qachon "BITTA komanda bilan" yoki "HARFLAR
+orqali" / "RAQAMLAR orqali" kabi USUL (qanday bajarilgani) haqida talab
+qo'yilmasin -- tekshiruv faqat YAKUNIY holatga (fayl bormi, ruxsat
+to'g'rimi va h.k.) asoslangani uchun, QANDAY bajarilganini bilib bo'lmaydi.
+Faqat NATIJA tavsiflansin.
+
 YANGI SAVOL QO'SHISH: pastdagi QUESTIONS ro'yxatiga yangi `_q(...)` qatori
-qo'shing va unga mos `check_N` funksiyasini yozing. Boshqa hech narsani
-o'zgartirish shart emas -- dvigatel (exam/core.py) avtomatik ishlaydi.
+qo'shing va unga mos `check_N` funksiyasini yozing.
 
 Har bir `check_*` funksiyasi `ctx` (context) dict qabul qiladi:
     ctx["home"]         -- talabaning uy direktoriyasi
-    ctx["state"]        -- shu modul uchun saqlangan holat (setup() paytida
-                            yaratilgan qiymatlar, masalan baseline ro'yxatlar)
-    ctx["read_answer"]  -- ~/javoblar/<savol_id>.txt faylini o'qiydi (yo'q
-                            bo'lsa None qaytaradi)
+    ctx["state"]        -- shu modul uchun saqlangan holat
+    ctx["read_answer"]  -- ~/javoblar/<savol_id>.txt faylini o'qiydi
     ctx["run"](cmd)     -- komandani ishga tushiradi: (returncode, stdout, stderr)
-    ctx["sudo_run"](cmd)-- xuddi shu, lekin `sudo` bilan (root kerak bo'lganda)
+    ctx["sudo_run"](cmd)-- xuddi shu, lekin 'sudo' bilan
     ctx["normalize"](s) -- ortiqcha probel/bo'sh qatorlarni yumshatadi
-
-Tekshiruv funksiyasi True/False (yoki shunga o'xshash) qaytarishi kerak.
 """
 import os
 import re
@@ -39,25 +40,20 @@ import pwd
 def setup(home):
     extra = {}
 
-    # 13-savol uchun maxsus fayl (chown+chgrp)
-    my_file = os.path.join(home, "my-file")
-    open(my_file, "a").close()
-
-    # 10/13/16-savollar uchun: useradd bilan YANGI qo'shilgan userni
-    # aniqlash uchun boshlang'ich (mavjud) userlar ro'yxatini eslab qolamiz.
+    # 10-savol uchun: useradd bilan YANGI qo'shilgan userni aniqlash uchun
+    # boshlang'ich (mavjud) userlar ro'yxatini eslab qolamiz.
     extra["baseline_users"] = sorted(u.pw_name for u in pwd.getpwall())
 
     # 5-savol uchun: grep natijasi /etc/passwd ga YANGI user qo'shilishidan
     # (10-savol) OLDIN yoki KEYIN bajarilishidan qat'iy nazar bir xil
     # bo'lishi uchun, "/bin/bash" shell'iga ega userlar ro'yxatini HOZIROQ
-    # (hali hech narsa o'zgarmagan holatda) eslab qolamiz.
+    # eslab qolamiz.
     extra["baseline_bash_users"] = sorted(
         u.pw_name for u in pwd.getpwall() if u.pw_shell == "/bin/bash"
     )
 
     # 20-savol uchun: 'examdaemon' nomli, killall/pkill orqali nomi bo'yicha
-    # to'xtatiladigan haqiqiy fon jarayon yaratamiz ('sleep' dasturining
-    # nusxasi -- shunda /proc/<pid>/comm aynan 'examdaemon' bo'ladi).
+    # to'xtatiladigan haqiqiy fon jarayon yaratamiz.
     daemon_dir = os.path.join(home, ".exam", "module1")
     os.makedirs(daemon_dir, exist_ok=True)
     daemon_path = os.path.join(daemon_dir, "examdaemon")
@@ -93,12 +89,11 @@ def _new_users(ctx):
     return [u for u in pwd.getpwall() if u.pw_name not in baseline]
 
 
-def _is_file(*parts):
-    return os.path.isfile(os.path.join(*parts))
-
-
-def _is_dir(*parts):
-    return os.path.isdir(os.path.join(*parts))
+def _student_username(ctx):
+    """Talabaning o'z username'i -- provisioning HOME=/home/<user> qilib
+    sozlagani uchun, home yo'lining oxirgi qismidan olinadi (bu --grade
+    root sifatida ishga tushirilganda ham to'g'ri ishlaydi)."""
+    return os.path.basename(ctx["home"].rstrip("/"))
 
 
 # ------------------------------------------------------------------
@@ -117,11 +112,6 @@ def check_2(ctx):
     ans = ctx["read_answer"]()
     if not ans:
         return False
-    # DIQQAT: bu yerda LIVE-diff ishlatilmaydi -- "/" ostidagi /proc, /tmp,
-    # /run kabi papkalar imtihon davomida doimiy o'zgarib turadi (PID'lar,
-    # talabaning o'zi yaratgan fayllar va h.k.), shuning uchun exact-match
-    # doimo barqaror ishlamaydi. O'rniga tuzilma bo'yicha tekshiramiz:
-    # haqiqiy tree xulosasi bormi va asosiy tub papkalar sanab o'tilganmi.
     lines = ans.strip().splitlines()
     if len(lines) < 15:
         return False
@@ -141,7 +131,7 @@ def check_2(ctx):
 
 
 def check_3(ctx):
-    """3-savol: o'rnatilgan (installed) paketlar ro'yxati ('apt list --installed')."""
+    """3-savol: o'rnatilgan (installed) paketlar ro'yxati."""
     ans = ctx["read_answer"]()
     if not ans:
         return False
@@ -150,7 +140,7 @@ def check_3(ctx):
         return False
     pattern = re.compile(r"^\S+/\S+[, ].*\[installed")
     matched = sum(1 for l in lines if pattern.search(l))
-    return matched >= len(lines) * 0.9  # deyarli barcha qatorlar shu formatda
+    return matched >= len(lines) * 0.9
 
 
 # --- 4-savol: 'kitoblar/' fayl-papka arxitekturasi ---
@@ -190,65 +180,38 @@ def check_5(ctx):
         line = line.strip()
         if not line or ":" not in line:
             continue
-        username = line.split(":", 1)[0]
-        found.add(username)
-
-    # Talaba bu savolni 10-savoldan OLDIN ham, KEYIN ham bajargan bo'lishi
-    # mumkin -- ikkalasi ham haqiqatan to'g'ri javob (chunki 10-savol aynan
-    # shu /etc/passwd faylini o'zgartiradi). Shuning uchun bitta "qotib
-    # qolgan" ro'yxatga emas, balki oraliqqa solishtiramiz: javob kamida
-    # imtihon boshidagi (baseline) userlarni o'z ichiga olishi, va hozirgi
-    # haqiqiy /bin/bash userlaridan oshib ketmasligi kerak.
+        found.add(line.split(":", 1)[0])
     current_bash_users = {
         u.pw_name for u in pwd.getpwall() if u.pw_shell == "/bin/bash"
     }
+    # Talaba bu savolni 10-savoldan OLDIN ham, KEYIN ham bajargan bo'lishi
+    # mumkin -- ikkalasi ham haqiqatan to'g'ri javob.
     return baseline <= found <= current_bash_users
 
 
 def check_6(ctx):
-    """6-savol: dir1/dir2/dir3/dir4 ichma-ich papkalar (bitta komanda)."""
-    return _is_dir(ctx["home"], "dir1", "dir2", "dir3", "dir4")
+    """6-savol: dir1/dir2/dir3/dir4 ichma-ich papkalar."""
+    return os.path.isdir(os.path.join(ctx["home"], "dir1", "dir2", "dir3", "dir4"))
 
 
 def check_7(ctx):
-    """7-savol: 'kitoblar' -> 'kitoblar2' nusxalash va o'zgartirishlar."""
-    home = ctx["home"]
-    base = os.path.join(home, "kitoblar2")
-    if not os.path.isdir(base):
+    """7-savol: /etc dan ~/etc.tar.xz arxiv olish (xz formatida)."""
+    path = os.path.join(ctx["home"], "etc.tar.xz")
+    if not os.path.isfile(path):
         return False
-    # a) ertak o'chirilgan
-    if os.path.exists(os.path.join(base, "ertak")):
+    try:
+        with tarfile.open(path, "r:xz") as tf:
+            names = tf.getnames()
+    except Exception:
         return False
-    # b) afsona -> afsonalar (yashirin_orol undan keyinroq ko'chirilgan
-    #    bo'lishi kerak, shuning uchun faqat olmos_tosh/suv_parilari qoladi)
-    afsonalar = os.path.join(base, "afsonalar")
-    if not (
-        os.path.isdir(afsonalar)
-        and os.path.isfile(os.path.join(afsonalar, "olmos_tosh"))
-        and os.path.isfile(os.path.join(afsonalar, "suv_parilari"))
-    ):
-        return False
-    if os.path.exists(os.path.join(base, "afsona")):
-        return False
-    # c) fantastik -> roman/fantastik2 (nusxa, nomlangan holda)
-    fantastik2 = os.path.join(base, "roman", "fantastik2")
-    if not (
-        os.path.isdir(fantastik2)
-        and os.path.isfile(os.path.join(fantastik2, "batman"))
-        and os.path.isfile(os.path.join(fantastik2, "robot"))
-        and os.path.isfile(os.path.join(fantastik2, "urgimchak_odam"))
-    ):
-        return False
-    # d) yashirin_orol -> roman/ ga ko'chirilgan (afsonalar ichida qolmagan)
-    if not os.path.isfile(os.path.join(base, "roman", "yashirin_orol")):
-        return False
-    if os.path.exists(os.path.join(afsonalar, "yashirin_orol")):
-        return False
-    return True
+    has_etc_content = any(
+        "os-release" in n or n.strip("/").split("/")[-1] == "etc" for n in names
+    )
+    return has_etc_content and len(names) > 5
 
 
 def check_8(ctx):
-    """8-savol: /etc dan ~/etc.tar.gz arxiv olish."""
+    """8-savol: /etc dan ~/etc.tar.gz arxiv olish (gzip formatida)."""
     path = os.path.join(ctx["home"], "etc.tar.gz")
     if not os.path.isfile(path):
         return False
@@ -264,7 +227,7 @@ def check_8(ctx):
 
 
 def check_9(ctx):
-    """9-savol: gzip paketini apt-mark hold qilish."""
+    """9-savol: gzip paketini apt orqali hold qilish."""
     rc, out, _ = ctx["run"]("apt-mark showhold")
     return rc == 0 and "gzip" in out
 
@@ -298,20 +261,15 @@ def check_12(ctx):
 
 
 def check_13(ctx):
-    """13-savol: ~/my-file ning user VA guruh egasini bitta komanda bilan
-    (10-savolda yaratilgan user, 16-savolda yaratilgan 'linux' guruhi)
-    o'zgartirish."""
+    """13-savol: 'my-file' yaratib, uning user VA guruh egasini bitta
+    komanda bilan 'root' ga o'zgartirish (mustaqil, boshqa savolga
+    bog'liq emas)."""
     path = os.path.join(ctx["home"], "my-file")
     try:
         st = os.stat(path)
     except FileNotFoundError:
         return False
-    new_uids = {u.pw_uid for u in _new_users(ctx)}
-    try:
-        linux_gid = grp.getgrnam("linux").gr_gid
-    except KeyError:
-        return False
-    return st.st_uid in new_uids and st.st_gid == linux_gid
+    return st.st_uid == 0 and st.st_gid == 0
 
 
 # --- 14/15-savollar: bir nechta fayl, bir nechta ruxsat qiymati ---
@@ -320,26 +278,32 @@ _NUMBER_PERMS = {"perm-x": 0o555, "perm-y": 0o711, "perm-z": 0o440}
 
 
 def check_14(ctx):
-    """14-savol: 3 ta faylga HARFLAR orqali turli ruxsatlar berish."""
+    """14-savol: 3 ta faylga turli ruxsatlar berish."""
     home = ctx["home"]
     return all(_stat_mode(os.path.join(home, f)) == m for f, m in _LETTER_PERMS.items())
 
 
 def check_15(ctx):
-    """15-savol: 3 ta faylga RAQAMLAR orqali turli ruxsatlar berish."""
+    """15-savol: yana 3 ta faylga turli ruxsatlar berish."""
     home = ctx["home"]
     return all(_stat_mode(os.path.join(home, f)) == m for f, m in _NUMBER_PERMS.items())
 
 
 def check_16(ctx):
-    """16-savol: 'linux' nomli guruh yaratib, yangi useringizni qo'shish."""
+    """16-savol: 'linux' guruhini yaratib, O'ZINI shu guruhga qo'shish
+    (mustaqil, boshqa savolga bog'liq emas)."""
     try:
         linux_group = grp.getgrnam("linux")
     except KeyError:
         return False
-    new_usernames = {u.pw_name for u in _new_users(ctx)}
-    members = set(linux_group.gr_mem)
-    return bool(members & new_usernames)
+    username = _student_username(ctx)
+    if username in linux_group.gr_mem:
+        return True
+    # asosiy (primary) guruh sifatida ham qabul qilinadi
+    try:
+        return pwd.getpwnam(username).pw_gid == linux_group.gr_gid
+    except KeyError:
+        return False
 
 
 def check_17(ctx):
@@ -353,10 +317,9 @@ def check_17(ctx):
     found_valid = False
     for tok in tokens:
         if not tok.isdigit():
-            return False  # faqat PID raqam(lar)i bo'lishi kerak, boshqa matn emas
-        comm_path = "/proc/%s/comm" % tok
+            return False
         try:
-            with open(comm_path) as f:
+            with open("/proc/%s/comm" % tok) as f:
                 comm = f.read().strip()
         except OSError:
             continue
@@ -380,15 +343,12 @@ def check_18(ctx):
 
 
 def check_19(ctx):
-    """19-savol: root crontabiga haftalik /etc backup vazifasi qo'shish."""
+    """19-savol: root crontabiga @daily maxsus vaqt belgisi bilan yozuv
+    qo'shish."""
     rc, out, _ = ctx["sudo_run"]("crontab -l -u root")
     if rc != 0:
         return False
-    # "0 2 * * 2 ... cp -r ... /etc ... /tmp/etc-backup" ko'rinishidagi
-    # qatorni (probel/flag farqlariga toqatli) qidiramiz.
-    pattern = re.compile(
-        r"^\s*0\s+2\s+\*\s+\*\s+2\s+.*\bcp\b.*-r.*\betc\b.*etc-backup", re.MULTILINE
-    )
+    pattern = re.compile(r"^\s*@daily\s+.*\btrue\b", re.MULTILINE)
     return bool(pattern.search(out))
 
 
@@ -411,7 +371,7 @@ def check_20(ctx):
             state_char = content.rsplit(")", 1)[-1].split()[0]
         except (OSError, IndexError):
             return False
-        if state_char != "Z":  # hali tirik (zombie emas)
+        if state_char != "Z":
             return False
     return True
 
@@ -423,22 +383,22 @@ QUESTIONS = [
     _q(
         1, 3,
         "Uy (home) direktoriyangizga qaytib, joriy direktoriyani ekranga "
-        "chiqarish orqali tekshiring va natijani ~/javoblar/1.txt fayliga "
-        "yozing",
+        "chiqarish buyrug'ini yozing va natijani ~/javoblar/1.txt fayliga "
+        "yo'naltiring (> orqali)",
         check_1,
     ),
     _q(
         2, 3,
         "'tree' buyrug'idan foydalanib, '/' (root) direktoriyasi ichidagi "
         "papkalarning FAQAT 2 qatlam chuqurlikdagi tarkibini ko'ring va "
-        "natijani ~/javoblar/2.txt fayliga yo'naltiring",
+        "natijani ~/javoblar/2.txt fayliga yo'naltiring (> orqali)",
         check_2,
     ),
     _q(
         3, 3,
         "'apt' yordamida tizimingizga hozircha O'RNATILGAN (installed) "
         "paketlar ro'yxatini ko'ring, natijani ~/javoblar/3.txt fayliga "
-        "yozing",
+        "yo'naltiring (> orqali)",
         check_3,
     ),
     _q(
@@ -468,24 +428,20 @@ QUESTIONS = [
     _q(
         5, 3,
         "/etc/passwd faylidan 'grep' orqali faqat '/bin/bash' bilan "
-        "tugagan qatorlarni filtrlab, ~/javoblar/5.txt fayliga yozing",
+        "tugagan qatorlarni filtrlab, ~/javoblar/5.txt fayliga yo'naltiring "
+        "(> orqali)",
         check_5,
     ),
     _q(
         6, 3,
         "Uy direktoriyangizda dir1/dir2/dir3/dir4 ko'rinishidagi ichma-ich "
-        "papkalarni BITTA komanda bilan yarating",
+        "papkalarni yarating",
         check_6,
     ),
     _q(
         7, 3,
-        "4-savolda yaratgan 'kitoblar' papkangizni 'kitoblar2' nomi bilan "
-        "nusxalang (cp -r), so'ng 'kitoblar2' ichida: "
-        "a) 'ertak' papkasini butunlay o'chiring; "
-        "b) 'afsona' papkasini 'afsonalar' deb qayta nomlang; "
-        "c) 'fantastik' papkasini 'roman' papkasi ICHIGA 'fantastik2' nomi "
-        "bilan nusxalang; "
-        "d) 'yashirin_orol' faylini 'roman' papkasiga ko'chiring (mv)",
+        "/etc papkadan, uy direktoriyangizga etc.tar.xz nomli arxiv oling "
+        "(tar, xz formatida)",
         check_7,
     ),
     _q(
@@ -496,8 +452,8 @@ QUESTIONS = [
     ),
     _q(
         9, 3,
-        "gzip nomli paketni keyingi upgrade'lardan olib tashlang "
-        "('apt-mark hold')",
+        "gzip nomli paketni keyingi upgrade'lardan apt orqali olib "
+        "tashlang",
         check_9,
     ),
     _q(
@@ -510,49 +466,48 @@ QUESTIONS = [
         11, 3,
         "'find' buyrug'i yordamida /etc ichidan hajmi 100KB dan katta "
         "bo'lgan fayllarni toping, natijasini ~/javoblar/11.txt fayliga "
-        "yozing",
+        "yo'naltiring (> orqali)",
         check_11,
     ),
     _q(
         12, 3,
         "'systemctl status'dan foydalanib 'cron' xizmatining holatini "
-        "tekshiring, natijasini ~/javoblar/12.txt fayliga yozing",
+        "tekshiring, natijasini ~/javoblar/12.txt fayliga yo'naltiring "
+        "(> orqali)",
         check_12,
     ),
     _q(
         13, 3,
-        "~/my-file faylining HAM user, HAM guruh egasini BITTA komanda "
-        "bilan, 10-savolda yaratgan useringiz va 16-savolda yaratiladigan "
-        "'linux' guruhiga o'zgartiring (masalan: chown user:group fayl)",
+        "Uy direktoriyangizda 'my-file' nomli bo'sh fayl yarating, so'ng "
+        "uning HAM user, HAM guruh egasini BITTA komanda bilan 'root'ga "
+        "o'zgartiring (masalan: chown user:group fayl)",
         check_13,
     ),
     _q(
         14, 3,
         "Uy direktoriyangizda perm-a, perm-b, perm-c nomli fayllar "
-        "yarating va ularga HARFLAR orqali (masalan ugo=rwx) mos ravishda "
-        "quyidagi ruxsatlarni bering: perm-a: rwxrwxrwx (777); "
-        "perm-b: rwxr-xr-- (754); perm-c: rw-rw---- (660)",
+        "yarating va ularga mos ravishda quyidagi ruxsatlarni bering: "
+        "perm-a: rwxrwxrwx; perm-b: rwxr-xr--; perm-c: rw-rw----",
         check_14,
     ),
     _q(
         15, 3,
         "Uy direktoriyangizda perm-x, perm-y, perm-z nomli fayllar "
-        "yarating va ularga RAQAMLAR orqali mos ravishda quyidagi "
-        "ruxsatlarni bering: perm-x: r-xr-xr-x (555); "
-        "perm-y: rwx--x--x (711); perm-z: r--r----- (440)",
+        "yarating va ularga mos ravishda quyidagi ruxsatlarni bering: "
+        "perm-x: 555; perm-y: 711; perm-z: 440",
         check_15,
     ),
     _q(
         16, 3,
-        "'linux' nomli yangi guruh yarating va 10-savolda yaratgan "
-        "useringizni shu guruhga qo'shing ('usermod -aG' yoki 'gpasswd -a')",
+        "'linux' nomli yangi guruh yarating va O'ZINGIZNI shu guruhga "
+        "qo'shing ('usermod -aG' yoki 'gpasswd -a')",
         check_16,
     ),
     _q(
         17, 3,
         "'sshd' protsessining PID (protsess raqami)ni FAQAT raqam holida "
         "('pidof' yoki 'pgrep' orqali) aniqlang, natijani ~/javoblar/17.txt "
-        "fayliga yozing",
+        "fayliga yo'naltiring (> orqali)",
         check_17,
     ),
     _q(
@@ -562,17 +517,16 @@ QUESTIONS = [
     ),
     _q(
         19, 3,
-        "Super user (root) crontabiga: har hafta SESHANBA kuni soat "
-        "02:00da /etc papkani /tmp/etc-backup papkaga nusxalaydigan "
-        "(cp -r bilan) vazifa qo'shing (masalan: "
-        "'0 2 * * 2 cp -r /etc /tmp/etc-backup')",
+        "Super user (root) crontabiga @daily maxsus vaqt belgisi bilan "
+        "/usr/bin/true buyrug'ini bajaradigan vazifa qo'shing (masalan: "
+        "'@daily /usr/bin/true')",
         check_19,
     ),
     _q(
         20, 3,
         "Sizning hisobingiz ostida 'examdaemon' nomli fon jarayon ishga "
         "tushirilgan. Uni PID orqali EMAS, balki NOMI orqali ('killall' "
-        "yoki 'pkill' bilan) zudlik bilan to'xtating",
+        "yoki 'pkill' bilan) to'xtating",
         check_20,
     ),
 ]
