@@ -294,5 +294,10 @@ class Engine:
 
         self._print_tasks(state)
 
-        if not state.get("submitted") and os.environ.get("EXAM_NO_EXEC") != "1":
+        # DIQQAT: submit qilingan bo'lsa ham bashga tushiramiz -- aks holda
+        # talaba qaytadan SSH bilan kirganda (masalan tasodifan uzilib
+        # qolsa) darhol sessiyasi yopilib, o'z akkauntidan butunlay
+        # chetlanib qoladi (chunki bu jarayon .bash_profile orqali `exec`
+        # bilan chaqirilgan -- login shell'ning o'rnini bosgan).
+        if os.environ.get("EXAM_NO_EXEC") != "1":
             os.execvp("bash", ["bash"])
