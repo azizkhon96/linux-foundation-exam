@@ -96,13 +96,45 @@ fi
 # dist/ topilmasa, avtomatik build qilishga urinamiz
 if [[ ! -d "$DIST_DIR" ]]; then
     echo "Ogohlantirish: '$DIST_DIR' topilmadi. './build.sh' orqali qurishga urinaman..."
-    if command -v pyarmor >/dev/null 2>&1 && [[ -x "$SCRIPT_DIR/build.sh" ]]; then
+    if [[ -x "$SCRIPT_DIR/build.sh" ]]; then
         "$SCRIPT_DIR/build.sh"
     else
-        echo "Xato: pyarmor topilmadi yoki build.sh yo'q. Avval 'pip install pyarmor && ./build.sh' ni bajaring." >&2
+        echo "Xato: build.sh topilmadi." >&2
         exit 1
     fi
 fi
+
+# --- O'Z-O'ZINI SINASH (smoke test) ---
+# Hech qaysi userga (yangi ham, --refresh ham) BUZUQ dist hech qachon
+# nusxalanmasligi uchun -- avval bir marta, haqiqatan ishga tushirib
+# tekshiramiz. Muammo topilsa, butun skript to'xtaydi va hech kimga
+# tegmaydi (allaqachon buzuq nusxalangan userlar bo'lsa ham, ular
+# o'zgarishsiz qoladi -- kamida yangi buzuq nusxalar qo'shilmaydi).
+echo "'$DIST_DIR/module1' sinovdan o'tkazilmoqda..."
+SMOKE_HOME="$(mktemp -d)"
+if EXAM_NO_EXEC=1 HOME="$SMOKE_HOME" python3 "$DIST_DIR/module1" >"$SMOKE_HOME/out.log" 2>&1; then
+    SMOKE_OK=1
+else
+    SMOKE_OK=0
+fi
+if [[ -f "$SMOKE_HOME/.exam/module1/state.json" ]]; then
+    SMOKE_PID="$(python3 -c "import json;print(json.load(open('$SMOKE_HOME/.exam/module1/state.json')).get('task20_pid',''))" 2>/dev/null || true)"
+    [[ -n "$SMOKE_PID" ]] && kill -9 "$SMOKE_PID" 2>/dev/null || true
+fi
+if [[ "$SMOKE_OK" -ne 1 ]]; then
+    echo "XATO: '$DIST_DIR/module1' ishga tushmadi -- hech qanday userga nusxalanmaydi!" >&2
+    echo "--- xato matni ---" >&2
+    cat "$SMOKE_HOME/out.log" >&2
+    echo "------------------" >&2
+    rm -rf "$SMOKE_HOME"
+    echo >&2
+    echo "Tuzatish: shu VM'da 'rm -rf dist .buildvenv && ./build.sh' ni qayta ishga tushiring," >&2
+    echo "keyin shu provision_students.sh buyrug'ini qayta bering." >&2
+    exit 1
+fi
+rm -rf "$SMOKE_HOME"
+echo "OK: dist ishlayapti, davom etilmoqda."
+echo
 
 # --- Sodda, o'qish/aytish oson parol generatori ---
 WORDS=(olma armut anor uzum tut behi nok gilos shaftoli
