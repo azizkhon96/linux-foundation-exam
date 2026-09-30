@@ -25,11 +25,27 @@ cd "$(dirname "$0")"
 if command -v pyarmor >/dev/null 2>&1; then
     PYARMOR=pyarmor
 else
-    echo "pyarmor tizimda topilmadi -- mahalliy virtualenv (.buildvenv/) orqali o'rnatilmoqda..."
-    python3 -m venv .buildvenv
-    .buildvenv/bin/pip install --quiet --upgrade pip
-    .buildvenv/bin/pip install --quiet pyarmor
-    PYARMOR="$(pwd)/.buildvenv/bin/pyarmor"
+    echo "pyarmor tizimda topilmadi -- o'rnatishga urinilmoqda..."
+    PYARMOR=""
+    # 1-urinish: mahalliy virtualenv (toza, tavsiya etiladigan yo'l).
+    if python3 -m venv .buildvenv 2>/tmp/build-venv-err.log \
+        && .buildvenv/bin/pip install --quiet --upgrade pip 2>>/tmp/build-venv-err.log \
+        && .buildvenv/bin/pip install --quiet pyarmor 2>>/tmp/build-venv-err.log; then
+        PYARMOR="$(pwd)/.buildvenv/bin/pyarmor"
+    else
+        echo "Ogohlantirish: virtualenv orqali o'rnatish muvaffaqiyatsiz bo'ldi" \
+             "(ko'pincha 'ensurepip'/python3-venv paket muammosi). Log: /tmp/build-venv-err.log" >&2
+        echo "2-urinish: tizim pip'i bilan (--break-system-packages)..." >&2
+        rm -rf .buildvenv
+        if pip3 install --quiet --break-system-packages --user pyarmor 2>/tmp/build-pip-err.log; then
+            PYARMOR="$(python3 -c 'import site,os;print(os.path.join(site.USER_BASE,"bin","pyarmor"))')"
+        fi
+    fi
+    if [[ -z "$PYARMOR" || ! -x "$PYARMOR" ]]; then
+        echo "Xato: pyarmor hech qanday usul bilan o'rnatilmadi." >&2
+        echo "Qo'lda urinib ko'ring: pip3 install --break-system-packages pyarmor" >&2
+        exit 1
+    fi
 fi
 
 echo "Pyarmor versiyasi:"
@@ -57,12 +73,10 @@ if EXAM_NO_EXEC=1 HOME="$SMOKE_HOME" python3 dist/module1 >"$SMOKE_HOME/out.log"
 else
     SMOKE_OK=0
 fi
-# smoke-test 20-savol uchun fon jarayon yaratadi -- faqat shuni, aniq PID
-# bo'yicha tozalaymiz (boshqa hech qanday jarayonga tegmaymiz).
-if [[ -f "$SMOKE_HOME/.exam/module1/state.json" ]]; then
-    SMOKE_PID="$(python3 -c "import json;print(json.load(open('$SMOKE_HOME/.exam/module1/state.json')).get('task20_pid',''))" 2>/dev/null || true)"
-    [[ -n "$SMOKE_PID" ]] && kill -9 "$SMOKE_PID" 2>/dev/null || true
-fi
+# smoke-test 20-savol uchun ('examdaemon') fon jarayon yaratadi -- faqat
+# shu SMOKE_HOME'ga tegishli nusxani, aniq yo'l bo'yicha tozalaymiz
+# (boshqa hech qanday -- masalan haqiqiy talabaning -- jarayoniga tegmaymiz).
+pkill -9 -f "^$SMOKE_HOME/\.exam/module1/examdaemon" 2>/dev/null || true
 
 if [[ "$SMOKE_OK" -ne 1 ]]; then
     echo "XATO: yangi qurilgan dist/module1 ishga tushmadi!" >&2

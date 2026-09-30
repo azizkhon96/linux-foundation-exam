@@ -27,7 +27,10 @@ if [[ "${1:-}" == "--all" ]]; then
         [[ -z "$c" || "$c" == examtpl-* ]] && continue
         found=1
         echo "================ $c ================"
-        grade_one "$c" | tail -4
+        # Bitta talabaning natijasi olinmasa ham (masalan hali imtihonni
+        # boshlamagan bo'lsa, module1 --grade xato kod bilan chiqadi),
+        # 'set -e'+'pipefail' butun ro'yxatni to'xtatib qo'ymasligi kerak.
+        grade_one "$c" 2>&1 | tail -4 || true
         echo
     done < <(incus list --format csv -c n 2>/dev/null)
     if [[ "$found" -eq 0 ]]; then

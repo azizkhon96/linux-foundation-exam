@@ -37,7 +37,9 @@ REFRESH=0
 REFRESH_ALL=0
 
 usage() {
-    grep '^#' "$0" | sed 's/^#//' | sed '1,2d'
+    # Faqat faylning ENG BOSHIDAGI izoh blokini chiqaradi -- butun faylni
+    # skanerlab, skript ichidagi bo'lim sarlavhalarini aralashtirmaslik uchun.
+    awk 'NR==1{next} /^#/{sub(/^# ?/,""); print; next} {exit}' "$0"
     exit 1
 }
 

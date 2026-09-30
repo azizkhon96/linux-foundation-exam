@@ -34,7 +34,10 @@ REBUILD_TEMPLATE=0
 PORT_START=2200
 
 usage() {
-    grep '^#' "$0" | sed 's/^#//' | sed '1,2d'
+    # Faqat faylning ENG BOSHIDAGI izoh blokini (shebang'dan keyin, birinchi
+    # bo'sh/izohsiz qatorgacha) chiqaradi -- butun faylni skanerlab, skript
+    # ichidagi bo'lim sarlavhalarini ham aralashtirib yubormaslik uchun.
+    awk 'NR==1{next} /^#/{sub(/^# ?/,""); print; next} {exit}' "$0"
     exit 1
 }
 
@@ -61,6 +64,7 @@ fi
 # ------------------------------------------------------------------
 if ! command -v incus >/dev/null 2>&1; then
     echo "incus topilmadi -- o'rnatilmoqda..."
+    export DEBIAN_FRONTEND=noninteractive
     apt-get update -qq
     apt-get install -y -qq incus
 fi
@@ -99,7 +103,12 @@ ensure_template() {
     incus launch "$BASE_IMAGE" examtpl-builder
     _wait_ready examtpl-builder
 
+    # DIQQAT: DEBIAN_FRONTEND=noninteractive SHART -- aks holda debconf
+    # 'incus exec' orqali (pty'siz) ishga tushganda interaktiv terminal
+    # kutib butunlay OSILIB QOLADI (real VM'da aynan shu joyda "uzilib
+    # qolish" sifatida kuzatilgan va shu yerda ham takrorlab tasdiqlangan).
     incus exec examtpl-builder -- bash -c "
+        export DEBIAN_FRONTEND=noninteractive
         apt-get update -qq
         apt-get install -y -qq openssh-server tree psmisc python3-venv python3-pip >/dev/null
         systemctl enable --now ssh
@@ -223,11 +232,16 @@ refresh_student() {
 # ------------------------------------------------------------------
 ensure_template
 
+# Oldingi urinish (masalan tarmoq/pip xatosi bilan) yarim yo'lda to'xtagan
+# bo'lsa, undan qolgan vaqtinchalik konteyner talaba deb hisoblanmasligi
+# uchun har safar boshida tozalab tashlaymiz.
+incus delete -f examtpl-refresh >/dev/null 2>&1 || true
+
 if [[ "$REFRESH_ALL" -eq 1 ]]; then
     USERNAMES=()
     while IFS= read -r n; do
         [[ -n "$n" ]] && USERNAMES+=("$n")
-    done < <(incus list --format csv -c n 2>/dev/null | grep -v '^examtpl-builder$')
+    done < <(incus list --format csv -c n 2>/dev/null | grep -vE '^examtpl-(builder|refresh)$')
     if [[ ${#USERNAMES[@]} -eq 0 ]]; then
         echo "Xato: hech qanday mavjud konteyner topilmadi." >&2
         exit 1
