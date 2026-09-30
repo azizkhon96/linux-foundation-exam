@@ -1,0 +1,73 @@
+Lesson PLAN (15.10.2021)
+
+	Linux Backup:
+		SSH:	
+			sudo install openssh-server	
+			ssh user@ip
+			ssh user@ip -p <port>			#connect using port number
+			ssh-keygen				#by default 2048 bit key generated
+			ssh-keygen -b 4096
+			ssh-keygen -t ed25519			#using other algorithm
+			ssh-copy-id username@remote_host	#copy public key		#~/.ssh/authorized_keys (public key file)	
+			ssh -i ~/.ssh/custom_key_name SYSUSER@x.x.x.x
+			change ssh server port:
+				nano /etc/ssh/sshd_config:
+				Port <port>
+
+        Set ssh keys:
+        	commands: ssh-keygen -t ed25519, -t rsa -b 4096, ssh-copy-id user@ip
+        
+        SCP:
+        	scp /path/file user@ip:/path/
+		scp user@ip:/path/file /path/
+		
+		scp -i /path/priv
+		scp -P <port>
+		scp -r (Recursive)
+		scp -p (Preserve modification time , access time, mode)
+		
+		
+		RSYNC
+			understanding rsync
+			install rsync both local and remote host
+			commands: rsync -r,-a,-P,-v,-z, --exclude , "/", 
+			over ssh: user@ip:/dir
+			make crontab, 
+			
+		#use ssh key:
+				rsync -Pav -e "ssh -i $HOME/.ssh/somekey -p 2222" username@hostname:/from/dir/ /to/dir/
+	   	Backup system:
+	   		prepare for backup
+	   		tar -cvpzf backup.tar.gz --exclude=/backup.tar.gz --one-file-system /
+	   		
+	   		cd / # THIS CD IS IMPORTANT THE FOLLOWING LONG COMMAND IS RUN FROM /
+			tar -cvpzf backup.tar.gz \
+			--exclude=/backup.tar.gz \
+			--exclude=/proc \
+			--exclude=/tmp \
+			--exclude=/mnt \
+			--exclude=/dev \
+			--exclude=/sys \
+			--exclude=/run \ 
+			--exclude=/media \ 
+			--exclude=/var/log \
+			--exclude=/var/cache/apt/archives \
+			--exclude=/usr/src/linux-headers* \ 
+			--exclude=/home/*/.gvfs \
+			--exclude=/home/*/.cache \ 
+			--exclude=/home/*/.local/share/Trash / 
+		
+		Restoring:
+			sudo tar -xvpzf /path/to/backup.tar.gz -C /media/whatever --numeric-owner
+			
+			sudo -s
+			for f in dev dev/pts proc ; do mount --bind /$f /media/whatever/$f ; done
+			chroot /media/whatever
+			dpkg-reconfigure grub-pc
+
+Useful links:
+	https://www.howtogeek.com/427480/how-to-back-up-your-linux-system/			#rsync
+	https://help.ubuntu.com/community/BackupYourSystem/TAR						#full backup 
+	https://help.ubuntu.com/community/CategoryBackupRecovery					#backup category all
+
+	https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2 #create sshkey

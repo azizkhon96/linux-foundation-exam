@@ -1,0 +1,47 @@
+
+	Standard file permission
+user owner and group owner, chgrp, chown (-R),  list special files
+first character	
+-		#regular file 
+d		#directory
+l		#link file
+p		#Named pipe
+b		#block device		(hdd,ssd,cd)
+c		#character device (monitor,printer,keyboard)
+s		#socket file
+
+ln -s 
+
+permissions rwx (on a file and on a directory),
+chown , chgrp 
+setting permissions (chmod):
+
+binary octal permission
+000 	0 	---
+001 	1 	--x
+010 	2 	-w-
+011 	3 	-wx
+100 	4 	r--
+101 	5 	r-x
+110 	6 	rw-
+111 	7 	rwx
+ 
+r 4, w 2, x 1.
+
+umask, umask <nomer>, default_permisson = 777-nomer (for dir); 666-nomer (for file) 
+
+umask = 002
+
+DIR:
+permission = 777 - umask = 775 rwx rwx r-x
+ 
+FILE:
+666-umask = 664   rw-rw-r--
+
+
+
+Advanced Permission. SUID/SGID/Stickiy bit
+https://www.geeksforgeeks.org/advance-file-permissions-in-linux/
+ 
+ Useful Links:  
+ 	https://www.thegeekstuff.com/2010/04/unix-file-and-directory-permissions/	#umask

@@ -1,0 +1,49 @@
+####	Dual-boot Linux and Windows	####
+
+PLAN.
+  1. Dual-boot install Linux after Windows
+  2. Install linux desktop on Laptop (Standalone). if not aviable install Linux desktop on Virtualbox.
+  3. Discovering Linux desktop. File Manager, Network, Applications, Settings
+
+
+Installing dual boot ubuntu and windows (UEFI-gpt/Legacy-mbr)
+
+1) Before install check bios type: legacy or UEFI:
+	Windows Key + R and type: msinfo32
+	or
+	go to bios F2/Del and check bios type
+
+2) Disable fastboot on Windows (Fastboot doesn't shutdown windows fully):
+	Windows Key + R type f
+     powercfg.cpl
+	Click "Choose what the power buttons do"
+	Uncheck "Turn on fast startup" 
+
+3) Use "Rufus" or "Ultra iso" to make bootable USB Linux (select gpt for UEFI; mbr for Legacy). 
+   On linux use "Startup USB disk creator"
+
+4) Make defragmentation on partion before splitting    # https://dontfear.ru/defragmentatsiya-diska-v-windows-10/
+   Split disk on Windows(on cmd type diskmgmt.msc)
+
+5) Fully shutdown windows and stick USB drive.
+   Turn on PC and go to BIOS(use del/f2)		# Hot keys: http://www.disk-image.com/faq-bootmenu.htm
+   Select USB drive to boot first. 
+   Disable secure boot (recommended) or Select OS type: Other OS
+   F10 save and exit
+
+6) Installing Linux:
+ 	Check thirth party codec and wifi driver
+	Select something else 
+	Create ext4 partition and mount to /
+	UEFI: Select efi partition for bootloader installation  
+	Legacy: Select ext4 / partiton (Recommended) or Select full disk for bootloader installation (Not recommended)
+	Reboot when Installation finished
+		
+7) After installation for Legacy (MBR):
+	Install EasyBCD and create boot entry then reboot 
+	
+8) If Windows booting only:
+	https://itsfoss.com/no-grub-windows-linux/
+	Run CMD as admin and type command:
+		bcdedit /set {bootmgr} path \EFI\ubuntu\grubx64.efi	
+

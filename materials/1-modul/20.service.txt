@@ -1,0 +1,59 @@
+####	Process and Services	####
+
+#Processes:
+		foreground and background
+		commands: ps, -f(full-format), a (all in tty), x(all inside system), -p (select pid), -u (select u id), -U (select u name) 
+				kill -l(list signals) kill -9 (system kill), (-0 no signal sent, but checking)
+				, killall(kill with ps name)
+				pidof,  ctr+c, ctr+z, &, bg, fg, top, free, htop
+		
+#Services:
+		listing : systemctl list-unit-files --type service --all, 
+
+Enabled – active services running in the background.
+Disabled – disabled services that users can enable directly using the start command.
+Masked – stopped services that can only be started by removing the masked property.
+Static – services that only run when another program or unit requires them.
+Failed – inactive services that can’t load or operate properly.
+
+
+
+
+systemctl | grep running, service --status-all
+		managing: using systemd and unit.d, start, stop, status, disable , enable, restart, reload
+		path: /usr/lib/systemd/system, /etc/systemd/system
+		example: 
+			[Unit]
+			Description=Test service
+			Requires=network.target
+			After=network.target
+
+			[Service]
+			User=username
+			Group=groupname
+			Type=simple																#forking
+			ExecStart=/usr/bin/my-script.sh
+		
+			[Install]
+			WantedBy=multi-user.target
+
+#Useful links:
+#systemd
+https://everyday.codes/linux/services-in-systemd-in-depth-tutorial/
+https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal
+https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files#:~:text=Wants%3D%20%3A%20This%20directive%20is%20similar,to%20configure%20most%20dependency%20relationships.
+https://linuxconfig.org/how-to-create-systemd-service-unit-in-linux
+
+
+
+Process state codes
+Here are the different values that the s, stat and state output specifiers
+
+(header “STAT” or “S”) will display to describe the state of a process.
+
+D ­ Uninterruptible sleep (usually IO)­ a blocked state. The process waits for a hardware condition and cannot handle any signal
+R ­ Running ­ Process is either running or ready to run
+S ­ Interruptible sleep (waiting for an event to complete) ­ a Blocked state of a process and waiting for an event or signal from another process
+T ­ Stopped, either by a job control signal or because it is being traced ­ Process is stopped or halted and can be restarted by some other process
+X dead (should never be seen)
+Z Defunct (“zombie”) process, terminated but not reaped by its parent­ process terminated, but the information is still there in the process table.

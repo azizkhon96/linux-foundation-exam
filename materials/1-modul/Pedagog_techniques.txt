@@ -1,0 +1,3 @@
+####	Pedagog Techniques	####
+
+1) Don't write full code first. Write non complete code and commands, then tell what issue this code has and what solve this problems. Then begin to make perfcet code or command gradually. 

@@ -1,0 +1,45 @@
+####	Archiving and Compression	####
+
+# Overview : archive, compression 
+
+tools		Extention		Year		Algorithm            
+gzip		  .gz				1992		 	 DEFLATE	        	 	Tez/Samarasiz
+bzip2		.bz2				1996			 Burrows-Wheeler 		Tez/Samarasiz
+xz			  .xz				1996		 	 LZMA           			Sekin/Samarali
+zstd		  .zst			2015		 	 Zstandard							TEz/Samarali
+
+
+# installion	
+apt install tar gzip bzip2 xz-utils zstd
+
+
+#Compression
+	gzip filename
+	gzip -d filename.gz
+	Options (gzip): -d, -k,-r,-v,-N (N=1-9), -h
+
+	extentions : .gz .bz2 .xz .zst 
+	options with tar: c f t x v p --exclude
+	compression option : z j J --zst
+	syntax: 	
+		tar --option test.tar test/
+		tar -xf test.tar -C /tmp/untarred
+
+	syntax for zip:
+		 zip -r test.zip test/
+		 unzip test.zip
+		 unzip test.zip -d /tmp/unziped
+
+	syntax for rar:
+		rar a test.tar test/
+		rar x test.tar /tmp/unrarred
+   rar e (without path)
+
+
+
+	Commonly used commands:
+usefull commands : wget (-b,-P) , curl (-O,-o), du (-hc -d), file, find /dir, find /dir -name "name" , -mtime , -atime,-size ,  -ctime +N, -N , N,  locate , updatedb
+history,$HISTSIZE up arrow, down arrow, ctr+r , !
+
+usefull links:
+https://dane-bulat.medium.com/archiving-and-compression-on-linux-an-introduction-3dc2490e1bb7

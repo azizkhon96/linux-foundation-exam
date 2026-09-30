@@ -1,0 +1,10 @@
+Distro family: Debian/Redhat 
+
+Terms:
+OS/VM/Virtualbox/Hypervisor/
+RAM/HDD/CPU/NIC/
+IP/MASK/GATEWAY/DHCP/DNS
+SWITCH/ROUTER/NAT/
+
+1. Installing debian 11 in virtualbox (auto partitioning, A. DHCP, B. NAT static (ip 10.0.2.20/24, gw  10.0.2.2))
+2. ssh to linux via putty, or CLI. Basic commands, ip a, w, who, whoami, ping 

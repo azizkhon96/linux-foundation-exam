@@ -1,0 +1,63 @@
+ 		
+	Learning make partitioning and formatting on cli (parted, fdisk)
+	Resizing raid
+
+
+	Configuring raid on cli (mdamd):
+		mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sda1 /dev/sdb2			#create raid
+		or
+		mdadm -Cv /dev/md0 -l1 -n2 /dev/sd[ab]1
+
+		mdadm --detail --scan >> /etc/mdadm.conf 	#make config permenant
+		or
+		mdadm --detail --scan >> /etc/mdadm/mdadm.conf
+
+
+		sudo update-initramfs -u
+
+		mdadm --fail /dev/md0 /dev/sda1				#fail and remove disk
+		mdadm --remove /dev/md0 /dev/sda1
+		or
+		mdadm /dev/md0 --fail /dev/sda1 --remove /dev/sda1
+
+		mdadm --add /dev/md0 /dev/sdb1						#add disk
+
+		cat /proc/mdstat	#check status
+		mdadm --detail /dev/md0
+
+
+		mdadm --stop /dev/md0			#stop and delete raid
+		mdadm --remove /dev/md0
+		mdadm --zero-superblock /dev/sda
+
+
+Copying partitoon table , backup 
+		MBR:
+			backup and restore:
+			sfdisk -d /dev/sda > partition.backup
+			sfdisk /dev/sdb <  partition.backup
+
+			copying partition to another disk:
+			sfdisk -d /dev/sda | sfdisk /dev/sdb
+
+		GPT:
+			Backup and restore:
+			sgdisk --backup=backup.txt/dev/sda
+			sgdisk --load-backup=backup.txt /dev/sdb
+			sgdisk -G /dev/sdb						#randomize GUID 
+
+			copying partition to another disk:
+			sgdisk -R /dev/sda /dev/sdb
+			sgdisk -G /dev/sdb
+
+
+
+Useful links:
+	https://www.prepressure.com/library/technology/raid
+	https://www.howtoforge.com/how-to-resize-raid-partitions-shrink-and-grow-software-raid
+	https://documentation.suse.com/sles/12-SP4/html/SLES-all/cha-raid-resize.html
+	https://www.linuxbabe.com/linux-server/linux-software-raid-1-setup
+	https://www.ducea.com/2009/03/08/mdadm-cheat-sheet/
+
+
+https://www.ricmedia.com/tutorials/create-a-linux-raid-array-using-mdadm

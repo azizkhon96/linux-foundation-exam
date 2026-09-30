@@ -1,0 +1,26 @@
+####	Installing Linux(Manual Partitioning)	####
+
+PLAN
+
+1. Install debian 12/13 using manual Manual Partitioning	(UEFI/Legacy) 
+2. Install ubuntu 24.04 server using Manual Partitioning (UEFI/Legacy)
+3. INstall Almalinux10	using Manual Partitioning (UEFI/Legacy)
+
+
+
+
+BIOS (Basic Input/Output System)
+The BIOS is a firmware that controls the hardware components and boot process of your PC.
+
+UEFI (Unified Extensible Firmware Interface)
+UEFI benefits: faster boot times, better security, larger disk support, and graphical user interface.
+
+
+MBR (Master Boot Record)
+GPT (GUID Partition Table)
+
+								MBR								GPT
+Maximum capacity				2TB								9.7ZB (~9.7 billion terabytes)
+Maximum partitions				26								128
+Partition/boot data location	At the beginning of the drive	Throughout the drive
+BIOS type						Legacy BIOS						UEFI

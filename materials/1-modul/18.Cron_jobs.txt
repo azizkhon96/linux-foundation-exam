@@ -1,0 +1,84 @@
+Lesson PLAN (13.10.2021)
+
+	Cron jobs
+		Understanding cron jobs
+		Editing crontab files	(*  -	,	/)
+		files : /etc/crontab, /var/spool/cron/crontabs/*, 
+		commands: crontab -u, -e, -r, -l, -i
+		strings: @hourly, @daily, @weekly, @monthly, @yearly, @reboot
+		Access crontab: /etc/cron.allow, /etc/cron.deny 
+		select-editor
+		save files with date appended
+		
+	Scripting:
+		basic shell script and running
+			
+			#!/bin/sh
+			echo "What is your name?"
+			read PERSON
+			echo "Hello, $PERSON"
+			
+		basic python script and running
+			
+			name = input("What is your name?")
+                       print("Hello, " + name)
+			
+	
+	Processes:
+		foreground and background
+		commands: ps, -f, ax, kill, kill -9, killall, pidof,  ctr+c, ctr+z, &, bg, fg, top, free, htop
+		
+	Services:
+		listing : systemctl list-unit-files, systemctl | grep running, service --status-all
+		managing: using systemd and unit.d, start, stop, status, disable , enable, restart, reload
+		path: /usr/lib/systemd/system, /etc/systemd/system
+		example: 
+			[Unit]
+			Description=Test service
+			Requires=Network.target
+			After=Network.target
+
+			[Service]
+			Type=simple
+			ExecStart=/usr/bin/my-script.sh
+		
+			[Install]
+			WantedBy=multi-user.target
+
+
+
+	Copying partitoon table , backup 
+		MBR:
+			backup and restore:
+			sfdisk -d /dev/sda > partition.backup
+			sfdisk /dev/sdb <  partition.backup
+
+			copying partition to another disk:
+			sfdisk -d /dev/sda | sfdisk /dev/sdb
+
+		GPT:
+			Backup and restore:
+			sgdisk --backup=table /dev/sda
+			sgdisk --load-backup=table /dev/sdb
+			sgdisk -G /dev/sdb						#randomize GUID 
+
+			copying partition to another disk:
+			sgdisk -R /dev/sda /dev/sdb
+			sgdisk -G /dev/sdb
+
+
+
+
+	
+
+	Useful links:
+
+https://linuxhint.com/cron_jobs_complete_beginners_tutorial/ 	#crontab 
+https://itsfoss.com/start-stop-restart-services-linux/			#managing services
+https://www.geeksforgeeks.org/processes-in-linuxunix/			#process
+
+#systemd
+https://everyday.codes/linux/services-in-systemd-in-depth-tutorial/
+https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal
+https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files#:~:text=Wants%3D%20%3A%20This%20directive%20is%20similar,to%20configure%20most%20dependency%20relationships.
+https://linuxconfig.org/how-to-create-systemd-service-unit-in-linux

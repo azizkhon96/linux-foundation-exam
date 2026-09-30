@@ -1,0 +1,80 @@
+####	Filters and Pipes	####
+
+grep <word> <file>
+grep, -i (insensitive), -v (verse), -A1
+ (after), -B1 (before), -C1 (context)
+sort, -r (reverse)	<file>
+wc -l(line) -w(word) -c(character)	<file>
+uniq
+cat <file> | grep <word>
+who, w
+
+####	Users and Groups	####
+
+#Four types of users: 
+	- root
+	- standard
+	- admin
+	- service/system
+
+#why need groups
+
+#Main files and directories:
+	- /etc/passwd
+	- /etc/shadow
+	- /etc/group
+	- /home
+	- /root
+
+#Switching Users
+	su username							#change user
+	su - username						#change user and all variables
+	su / su - / su root / su - root		#change user to root
+		
+#Adding User and Group
+	useradd [options]	username		#add user 
+	[options]:
+		-c "Comment"		#write name or others about user
+		-m 					#create home dir, by default it is not enabled
+		-s /bin/bash		#set user's login shell
+		-p <encrypted-password> or $(openssl passwd -6 "plain-text-password") # -6 is SHA521
+	groupadd group-name					#add group
+	
+	#default file:
+		- /etc/default/useradd
+	
+#Modify params
+	usermod [options]	username		#change user params
+		-L					#lock user
+		-U					#unlock user
+		-aG	group-name		#add user to this group
+		-c	"Comment"		#add comment
+	
+	gpasswd -a username group-name		#add user to group
+	gpasswd -d username group-name		#remove user from group
+
+	groupmod -n new-name group-name		#change params of group
+	
+	#Make admin
+	#debian
+		apt install sudo
+		usermod -aG sudo username
+	#redhat
+		yum install sudo
+		usermod -aG wheel username
+
+#show User info
+whoami				#show current username
+id	<username>		#show user and its groups 
+
+#Delete
+	userdel [options] username
+		-r			#delete user with home dir and mail dir
+		-f			#force to delete
+	groupdel group-name					#del group
+		-f			#force del group
+	
+#Useful Links:
+	https://embeddedinventor.com/linux-user-group-management-tutorial-part-1-basic-concepts/
+	https://embeddedinventor.com/linux-user-group-management-tutorial-part-2-adding-modifying-and-deleting-users-and-groups/
+	https://www.cyberciti.biz/faq/understanding-etcshadow-file/					#etc/shadow

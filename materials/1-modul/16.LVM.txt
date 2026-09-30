@@ -1,0 +1,69 @@
+
+
+lesson PLAN (01.10.2021)
+
+LVM (Logical Volume Management)
+
+	LVM explained:
+		Volume Group
+		Physical Volume
+Copying partitoon table , backup 
+		MBR:
+			backup and restore:
+			sfdisk -d /dev/sda > partition.backup
+			sfdisk /dev/sdb <  partition.backup
+
+			copying partition to another disk:
+			sfdisk -d /dev/sda | sfdisk /dev/sdb
+
+		GPT:
+			Backup and restore:
+			sgdisk --backup=table /dev/sda
+			sgdisk --load-backup=table /dev/sdb
+			sgdisk -G /dev/sdb						#randomize GUID 
+
+			copying partition to another disk:
+			sgdisk -R /dev/sda /dev/sdb
+			sgdisk -G /dev/sdb
+		Logical Volume
+
+	
+
+Installing OS on LVM
+
+	Installing OS on LVM on RAID
+	
+	
+	LVM advantages:
+	
+		The Specifics(perform while running)
+		Resizing Partitions
+		Moving Partitions
+		Many Partitions
+		Snapshots
+		
+	Using LVM on Linux:
+		create lvm flag on partition, using fdisk or parted;
+		pvcreate /dev/...				
+		vgcreate group-name /dev/... 
+		lvcreate -n volume-name -L <size> group-name  
+		# (find volumes on /dev/vg-name/lv-name or /dev/mapper/vg-name-lv-name )
+		# display commands: lvs, pvs, lvdisplay, pvdisplay, pvdisplay -m
+		lvextend -L +<size> vg-name/lv-name   #after changing lvm size, changa filesystem size using resize2fs
+		pvmove -n lv-name /dev/sd... /dev/sd...	 #move lv to other pv  (-b background,  -i s  showing progress )
+		lvcreate -s -n snap-name -L size vg-name/lv-name 	#create clone of LV
+		lvconvert --merge vg-name/snap-name		#after changing original go back to snap 
+
+
+	Resize volume:
+		umount /dev/vdb1
+		e2fsck /dev/vdb1
+		resize2fs /dev/vdb1 200M
+
+
+
+
+usefull links:
+https://wiki.ubuntu.com/Lvm 		#lvm overview and basic commands
+https://www.casesup.com/category/knowledgebase/howtos/how-to-shrink-an-lvm-volume-safely-on-linux  #shrinking root system on lvm based system
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/vg_remove_pv

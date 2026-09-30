@@ -1,0 +1,110 @@
+###########################
+####	Editors	####
+###########################
+
+	#nano editor:
+	
+nano file-name			#open new or existing file with nano
+ctr+G		#get help
+ctr+O		#save file 
+ctr+X		#exit 
+ctr+C		#cancel operation
+
+#copy or cut
+alt+A		#begin mark (or unset mark)
+alt+6		#copy marked text
+ctr+K		#cut text
+ctr+U		#paste text		
+
+#search
+ctr+W		#search first matched word
+alt+W		#search next matched 
+
+alt+U		#undo last operation
+alt+E		#redo last undone
+
+ctr+R		#Read other file inside this file
+
+nano +N nano-file
+
+	#vi(m) editor:
+
+vim file-name			#open new or existing file with vim
+
+#Modes
+Esc		#Command mode  
+  #Insert mode:
+i	#cursor position
+I	#beginning of line
+a	#after cursor
+A	#end of line
+o	#new line below
+O	#new line above
+
+#Saving
+:w		#write
+:q		#quit
+:wq		#write and quit (equal to ZZ )
+:q!		#quit without writing
+:w fname	#write changes to new file
+
+#Delete and Replace
+x	#forward delete
+X	#back delete
+r	#replace simvol
+J	#join two lines
+
+#Copy and Cut
+dd	#cut or delete
+3dd	#3 lines cut 
+p	#paste below
+P	#past above
+yy	#yank (copy) 
+4yy	#4 lines yank
+v	#mark text
+
+d0	#cut left side of the line
+d$	#cut right side of the line
+
+dw	#cut or delete word
+5dw	#cut 5 word forward
+db	#delete word backward	
+2db	#delte 2 word backward
+
+	
+#Navigation
+0	#set cursor to beginning of line
+$	#end of line
+:0	#beginning of raws
+:$	#end of raws
+:15	#15th raw
+w	#move forward via words
+b	#move backward via words
+
+
+#Searching
+/string	#search string forward
+?string	#search string backward
+n		#search next
+/^string	#search beginning match
+/string$	#search ending match
+
+
+#Find and Replace
+:1,$ s/foo/bar/	#subtitude word "foo" with "bar" first match of every line (from 0 to end row)
+:1,$ s/foo/bar/g	#subtitude all words (global)
+:4,7 s/foo/bar/g	#subtitude all words (global)	(from raw 4 to raw 7 )
+
+#Undo and Redo
+u 	#undo last operation	(equal to ctr+Z on Windows)
+. 	#Redo last operation
+
+#Read from file or CMD
+:r fname	#read other file inside vim 
+:r !cmd	#read output of command inside vim
+
+#Parameters set
+:set number		#set number on lines
+:set nonumber		#remove numbers
+:syntax on		#set colorful text
+:syntax off		#set off colors

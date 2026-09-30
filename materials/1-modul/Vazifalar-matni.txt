@@ -1,0 +1,423 @@
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum, Vazifa:
+1. Nazariy tushunchalarni o'rganib chiqish
+2. Virtualboxda debian sistemasini 2 xil usulda (NAT -static va Most - DHCP) o'rnatish.
+NAT IP: 10.0.2.0/24 GW: 10.0.2.2, DNS 8.8.8.8 yoki 10.0.2.3
+3. MOST network bilan o'rnatilgan sistemaga ssh orqali kirish
+a) ip address ni tekshirish, internet borligini ping orqali tekshirish
+b) root userga o'tish va sistemaga htop paletini o'rnatish va ishga tushirish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: htop òrnatish:
+
+apt install htop
+
+Ishga tushirish:
+
+htop
+[8/19/25 12:58 PM] Istam Ilmuz Admin: [ linux19-file-tree.pdf ]
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa(natijalar screenshot qilinadi va telegram orqali lichklaga tashaladi, doim!):
+
+1-qism
+1) 3.1 rasmdagi fayllar arxitekturasini yaratish (oxirida turgan oq rangdagila file, ko'k ranglilar direktoriya)
+2) Tree o'rnatish va u orqali Linuxni fayl daraxtini o'rganib chiqish, / ushbu directoriyadan avval 1 qatlam, keyin 2 , keyin 3 qatlam fayllani ko'rish
+3) a) mavjudotlar degan papkani mavjudotlar-copy degan papkaga kopirovat qilish b) va o'sha mavjudotlar-copy degan papkani ichidan lola degan gul va akula degan baliqni o'chirish,
+c) delfin degan nomni sazan degan nomga o'zgartirish,
+d) kaklikni qushlar papkasidan kesib olib , gullar papkasiga olib o'tish,
+e) daraxtlar degan papkani ichidagi narsalari bilan o'chirib yuborish
+4. undan tashqari darsda o'tilgan nazariy malumotlani takrorlab kelish, 
+a) Debian  va Redhat oilasi va ular orasidagi farqlar.
+b) Komandalar  va ularniy option lari
+5. ssh orqali oddiy user logini bilan sistemaga kirish va root userga o'tish va komandalar tarixini ekranga chiqarish:
+"history" deb yozilsa chiqadi, va natijani rasmga olib tashash
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Vazifa 2-qism.
+1) Hozirgi turgan direktoriyangizni (papkangizni) ekranga chiqaring
+2) /etc direktoriyasiga o'ting
+3) o'zingizni home direktoriyangizga bor yo'g'i 3 ta simvol (harf yoki element) yozib qayting
+4) /boot/grub direktoriyaga tab tugmasidan foydalangan holda o'ting
+5) hozirgi turgan direktoriyangizdan bitta orqaga qayting (parent direktoriyaga o'ting)
+6) root direktoriyaga o'ting (root direktoriya deganda asosiy hamma direktoriyalarni o'z ichiga oladigan direktoryia nazarda tutiladi, /root emas)
+7) root direktoriyadagi barcha fayllar ro'yxatini ekranga chiqaring
+8) root direktoriyadagi barcha fayllar ro'yxatini kengaytirilgan holda, va odamga o'qishi uchun tushunarli fomatda ekranga chiqaring
+9) O'ziz turgan direktoriyadan turing  /etc dagi fayllar ro'yxatini ekranga chiqaring
+10) O'ziz turgan direktoriyadan turing /sys va /var dagi fayllar ro'yxatini ekranga chiqaring
+11) /boot dagi fayllar ro'yxatini odam tushunadigan formatda ekranga chiqaring
+12) home direktoriyangizda testdir deb nomlangan direktoriya yarating
+13) /etc ga o'ting va shu yerdan turib o'zingizni home direktoriyangizda yangi-dir deb nomlangan direktoriya yarating
+14) home direktoriyangizda dir1/dir2/dir2/dir4 ichma-ich direktoriyalarni bitta komanda bn yarating
+15) testdir direktoriyasini o'chiring
+16) tree comandasidan foydalanib root direktoriyasi ichidagi har bir direktoriyaning 2 qatlam ichki fayllarini ko'rsating
+17) ushbu fayllar daraxtini o'z home direktiyangizda  yarating:
+
+amaliyot/
+├── hayvorlar
+│   ├── uy-hayvonlari
+│   │   ├── it
+│   │   ├── mushuk
+│   │   └── sigir
+│   └── yovvoyi-hayvonlar
+│       ├── bori
+│       ├── sher
+│       ├── tulki
+│       └── yulbars
+└── qushlar
+    ├── ucholadigan
+    │   ├── bulbul
+    │   ├── burgut
+    │   └── oqqush
+    └── ucholmaydigan
+        ├── pingvin
+        └── tovuq
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum.
+
+Vazifa: 
+
+1) file ichidagi malumotlani ko'rish uchun cat, tac, head, tail, less, more komandalarini kamida 5 martadan ishlatish, 
+fayllar: /etc/passwd, /etc/group, /etc/crontab, /etc/hosts, /proc/meminfo, /proc/cpuinfo. (avval fayllarn bitta bittalab va keyin  birdan hammasini ochib ko'rish)
+2) fayldagi malumotni 5, 10, 15 qatorini ekranga chiqarish , oxiri 2,8, 20 qatorini ekranga chiqarish
+3) echo, alias , unalias,  ""(qo'shtirnoq) qatnashtrib 5 tadan komanda yozish. alias komandasidan hosil bolgan yangi komandalarini ishlatib sinab ko'rish
+4) home papkayzda "salom" degan direktoriya yarating , uni ichiga 2 ta fayl yarating (file1 va file2). salom degan papkani salom2 salom3 salom4 degan yangi nomlar bilan home direktoriyangizga kopirovat qilish . salom2 degan faylni ichidagi fayllarni home papkayzda tmp degan papka oching va o'sha yerga kopirovat qiling .   (-i, -v -f -r optionlarni kerakli joyda qo'llang va eslab qoling)
+5) salom3 degan faylni ichidagi fayllarni nomini boshqa nomga o'zgartiring va salom2 degan papkani ichidagi malumotlari bilan o'chirib tashlan
+6) salom4 degan direktoriyani salom5 degan nomga o'zgartiring
+7) /etc/ va /var degan papkalar ichidagi fayllar ro'yxatini ekranra sortlab chiqarish
+8) echo orqali qo'shtirnoq ishlatmasdan quyidagi matnni ekranga chiqaring:
+Linuxdagi belgilar % $ * \ # ! &
+9) 
+a) Comandalarga komment yozing
+b) ekranga chiqishi kere bolgan ijobiy natijani bir faylga, error habarni boshqa faylga yo'naltiring
+c) echo yordamida tab va yangi qator belgilarini ishlatib 4 qator matnni ekranga chiqarish
+d) linuxda AND operatoridan foydalanib 3 ta komandalar juftligini yozish
+e) linuxda OR operatoridan foydalanib 3 ta komandalar juftligini yozish
+f) linuxda if ... else singari shart operatorini AND va OR qatnashtirish yaratish. Yani birinchi komanda ishlasa 2-komanda ham ishlasin aks holsa 3-komanda ishlasin
+g) Bitta qatorda 3 ta komandani ishga tushiring
+e) bitta komandani 4 qatorga bo'lib yozing
+10) Ushbu fayllarni touch orqali yarating: salom salim solo assalom fall file fole foole file23 file33 file43 file83 file85 file55 555 666 500 
+* ? va [] belgilaridan foydalanib quyidagi shartlarni bajaring:
+a) [] orqali bu fayllarni ekranga chiqaring: fall  file
+b) [] orqali bu fayllarni ekranga chiqaring: file55  file85
+c) [] orqali bu oxirgi 2 ta belgisi raqam bilan tugagan fayllarni ekranga chiqaring
+d) ? orqali bu fayllarni ekranga chiqaring: fall  file  fole
+e) ? orqali bu fayllarni ekranga chiqaring: file23  file33  file43  file55  file83  file85
+c) * orqali bu fayllarni ekranga chiqaring: assalom  salom
+e) * va [] orqali bu fayllarni ekranga chiqaring: fall  file  fole  foole
+8) ' '   " "   ;  &&  ||  #  \n  \t  \       []    *  ?  >  >>   2>   2>> 
+yuqoridagi belgilarni har birini kamida 5 tadan komanda yozish
+11)file,  which, alias  comandalariga 3 tadan misol yozing.
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum, vazifa:
+nanoda ishlash:
+home papkayzda ismiz bn bix xil fayl ochasiz , unga 4 qatorlik mant kiritasiz, keyin textni tóliq koporovat qilib, 2 qator joy tashlab pastgi qatorga vstavit qilasiz 2 marta.  Natijani rasmga olasiz. Endi matnni tepasidagi 2 qatorni kesib olib , eng oxirgi qatorga vstavit qilasiz, natijani rasmga olasiz. Matndan biror sózni izlaysiz va yana rasmga olasiz
+[8/19/25 12:58 PM] Istam Ilmuz Admin: vimda ishlash: 
+vimda familiyangiz bilan bir xil fayl ochasiz, 4 qator matn yozasiz, keyin saqlab chiqib ketasiz. Keyin qayta kirasiz, nanoda yozgan fayldagi matnizni  va /etc/passwd fayl matnini vimdan turib oxirgi qatorga óqib olasiz, uni oxiridan sanani chaqiradigan buyruqni yozasiz, keyin calendarni chaqiradigan buyruqni yozasiz, keyin / bu papkadagi fayllar róyxatini, keyin tree orqali / bu papkani 2 qatorni chiqazadigan buyruq.
+Natijani saqlaysiz, rasmga olasiz. 
+/ va ? Orqali biror sózni izlash, va ketma ket kórish (bu sóz bir nechta bólishi kerak matnda). Natija rasm.
+Matndan 4 qatorni kopirovat qilish, hamda pastgi qatorgan vstavit qilish.
+2 qatorni kesib olish, va pastgo qatorga vstavit qilish,
+1-qatordan 20-qatorgacha matndan biror sózni topib, hammasini boshqa bir sózga ózgartirish. Natija, rasm.
+Oxirgi qilingan amalni bekor qilish.
+Qatorlarga nomer qóyish. 
+Satrni órtasida turib, uning chap tomonini óchirish. 
+Kursorni bitta simvol bn satr oxiriga ótkazish. 
+Kursorni matnni oxiriga ótkazish 
+Kursorni matnni 20-qatoriga ótkazish.
+Natijarni rasmga olib, telegramda tashlab qóyish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+
+1.Debian 10 sistemasini o'rnatish — Manual Partitioning.
+
+a) Legacy BIOS
+/
+/home
+
+b) UEFI
+/
+/home
+/srv
+
+2.Ubuntu sistemasini o'rnatish — Manual Partitioning.
+
+a) Legacy BIOS.
+/
+/home
+/var
+
+b)UEFI
+/
+/boot
+/home
+
+3) Almalinux sistemasini o'rnatish - Manual Partitioning. 
+
+a) legacy bios.
+/boot
+/
+/var
+
+b) UEFI
+/
+/boot
+/data
+/home
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Keyingi dars hamma òzimizni komputerimizga windows yoniga Linux desktop muhitini òrnatamiz. (Majburiy emas, lekin foydali.) Komputerizdan 50-100GB bòsh joy ajratib qòying. Kimda fleshka bor bolsa ovosin. Qaysi Desktop Linux òrnatishni ham òylab kesin. (Arch bn Kali emas faqat) .
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Popularning desktop Linuxlar: 
+Ubuntu
+Mint
+Fedora
+Ubuntu DDE
+Pop!OS
+Deepin
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Asli hammasini ham ishlatsayz boluradi. Bazi farqla bor. masalan:
+
+Mint- resurs tejaydi, stabilniy, paket manageri yaxshi, kommunitysi kuchli 
+
+Ubuntu- dizayni chiroyli, stabilniy, paket manageri yaxshi, kommunitysi kuchli
+
+
+Debian- desktop muhitni yoqqanini tanlab òrnatasiz, paket manageri yaxshi
+
+Fedora- Redhat ga asoslangan, stabilniy, kommunitysi kuchli
+
+
+Deepin- MacOS dizayn. Resurs kòp ishlatadi.
+
+Ubuntu DDE - òzi ubuntu lekin dizayni Deepin.
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Dual-boot qilib linux òrnatish, darsda òrnatmaganla
+[8/19/25 12:58 PM] Istam Ilmuz Admin: curl "https://drive.usercontent.google.com/download?id=1--o7ouG6rru2ug8sDzJZ1C_huXPYSqy0&confirm=xxx" -o Linux.zip
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+1)hamma linuxga kiradi, va quyida yuborilgan link orqali Linux.zip degan faylni o'ziga ko'chirib oladi.  ichida faylla bor.  arxivlash va zichlashga o'shalardan foydalanasila. gzip, bzip2, xz, zstd formatlarda arxivlash va arxivdan ochish(-d,-f,-k,-r, optionlarni har birini ishlatish har bir komanda uchun ...(gz,bz2,xz,zstd)).  Home papkayla arxiv degan papka ochasiz. uyerda  arxivlangan va yechilgan degan papka ochasila, arxivlanagn va yechilgan degan papkalarni ichida gzip bzip xz zstd zip rar degan papkalar ochasila.  keyin sizga berilgan fayllardan foydalanib tar gzip bzip2 xz zsdt  formartlarga fayllarni va papklalarni arxivlaysila tar orqali.( c, f, x, v, t, -C,   z, j, J, --zstd,  optionlarni har bir arxiv turi uchun ishlatasila mos ravishda).  arxivlagan va zichlagan fayllarni arxivlangan degan papkani ichida silar ochgan papkalarga tashaysila, arxivdan ochilgan fayllarni yechilgan degan papka ichidagi  papkalarga mor ravisda extract qilib  tashlaysila
+[8/19/25 12:58 PM] Istam Ilmuz Admin: root dan:
+
+apt install curl
+
+keyin shu komanda
+[8/19/25 12:58 PM] Istam Ilmuz Admin: 3) 
+a) wget , wget -P  komandalari orqali linux uchun 3 xil deb packet ko'chirish. (shu packetlarni curl orqali ko'chirish)
+b) find kmandasini ishlatish, har bitta optionga 3  tadan misol: find ( -name, -iname, -user, -size, -ctime)
+c) locate komandasiga 3 ta misol.
+d) du komandasi orqali , ushbu direktoriyadagi 1 va  2  qatlam  papkalarni hajmini ko'rish:
+/ , /home/$USER, /etc
+e) history ga komandani qoldirmaydigan qilib yozish. History da komandala sonini 2000 ta qilish (vaqtincha va doimiy). ctr+r orqali historyda avval ishlatgan komandayzni chaqirish. Historyda N-chi qatorda ishlatgan komandayzni chaqrish.
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+⚠️Virtualboxda qilinsin.
+I.Filterlar va Pipe. 
+1) /proc/meminfo faylidagi quyidagi qatorlar ro'yxatini ekranga chiqarish:
+  a) "Huge" qatnashgan qatorlar 
+  b) "Huge" bilan boshlangan qatorlar   (^salom - qator boshi, hayr$ - qator oxiri) 
+  c) "write" bilan boshlangan qatorlar va ulardan keyin kelgan 2 qator. Katta va kichik harflarni farqlamagan holda. 
+  d) "write" bilan boshlangan qatorlar va ulardan oldin kelgan 3 qator. Katta va kichik harflarni farqlamagan holda. 
+  e) "Swap" bilan boshlangan qatorlar va ulardan tepa va pastdagi bir qator
+  f) "Huge" qatnashmagan qatorlar 
+2) apt list ni ekranga scroll qilinadigan holda chiqarish
+3) apt listni ichidan network degan so'zdan boshlangan qatorlarni chiqaring
+4) Repositoryda qancha packet borlgini tekshiring
+5) Faylga biror matn yozing va undagi qatorlar so'zlar va belgilar sonini toping (alohida)
+6) Faylni alifbo tartibida va teskari tartibda ekranga chiqaring
+7) Quyidagi matndagi qatorlarni takrorlanmaydigan qilib chiqarish:
+laptop
+pc
+phone
+pc
+pc
+phone
+ipad
+8) /etc/group fayldan 10-dan 15-qatorgacha bolgan qismini ajratib olib, natijani sortlab, natija.txt faylga yo'naltirish
+
+II. User and Group
+1) sistemaga user orqali ulaning va rootga o'ting. 2 xil xolda a) o'zgaruvchilarni(variable) saqlagan xolda. b) yangi o'zgaruvchilar bn
+2) 2 ta user yaratish (ism familiyasi, home direktoriyasi, shelni turi bash bilan, parol berish), user haqidagi malumotni kerakli fayldan topib ekranga chiqarish. Yangi yaratilgan userga komanda orqali o'tish
+3) yangi yaratilgan userlarni sistemaga kirishini cheklab qo'yish (natijani kerakli fayl orqali tekshirish) va cheklashni bekor qilish. Yaratilgan userni kommentariyasini o'zgartirish
+4) Yangi 3 ta guruh yaratish va 1 ta guruhni nomini o'zgartirish. Ushbu guruhga yangi yaratilgan userlarni qo'shish. Userlarni birini guruhdan o'chirish. guruhlarga oid bo'lgan faylni ekranga chiqaring. Siz yaratgan guruhni nomi bo'yicha filterlab ekranga chiqaring.
+5) hozrigi (siz ishlatyotgan)userni nomini ekranga chiqaring. Komanda orqali sistemadagi barcha userlarni id si va ular azo bo'lgan guruhlarini ekranga chiqaring 
+5) debian va almalinuxda sudo o'rnatish va yangi yaratilgan userlarga admin  huquqini berish va sudo orqali komanda yozib sinab ko'rish
+6) Userlardan birini faqat userni o'chirish malumotlari saqlangan holda. 2-userni malumotlari bn yani home papkasi bn o'chirish. 
+7) Yangi yaratilgan guruhni o'chirib yuborish. 
+8) Siz hozirda ishlab turgan userni parolini o'zgartirish
+9) sistemada /bin/bash ishlatadigan userlar ro'yxatini filterlab chiqaring
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum, vazifa:
+1) fayl yaratish  va uni pravalarini kórish(r,w,x)
+2) faylni ichiga odam bilan salomlashadigan va sanani ekranga chiqaradigan script yozish:
+3) yaratilgan faylni óqish,  va amalga oshirish (amalga oshirish uchun unga kerakli pravani berish) 
+4) /etc/ dagi barcha fayllar róyxatini pravalari bn ekranga chiqarish
+5) yangi papka yaratish va unga kirishni cheklash
+6) 3 ta standard user yaratish va siz yaratgan faylga barcha huquqni faqat ósha userlar uchun berish, qolgan barchadan olib tashlash
+7) siz yaratgan papkaga uchun test degan user yaratib faqat ósha user uchun barcha huquqni berish, boshqa barcha uchun huquqni bekor qilish
+8) new-file1, new-file2 degan fayllar yaratib, ularga user uchun barcha huquq , group uchun óqishga va amalga oshirishga huquq  va other uchun faqat óqish huquqini bering, birinchi faylga huquq berishda harflardan (r,w,x kabi), ikkinchi fayl uchun raqamlardan foydalaning (527 misol uchun)
+9) papka va uni ichida fayllae yarating, ularni barchasiga  bir qator kod orqali bir xil huquq bering va ularni user egasini va guruh egasini o'zgartiring (chown,chgrp)
+10) Biror faylni  guruh va user egasini bitta komanda bn o'zgartirish (example: chown username:groupname /path/file )
+11) 5 ta fayl yarating va ularga 777, 757, 765, 664, 722 huquqlarni harflar orqali bering(r,w,x kabi)
+12) yana 5 ta fayl yarating va ularga , rw-rw----, r--r-----, rwx--x--x,  r-xr-xr--, rwxr--r-- ushbu huquqlarni raqamlar orqali bering
+13)  yangi 3 ta fayl yarating (linux-1 linux-2 linux-3):
+1-faylni user egasini ózgartirish
+2-faylni guruh egasini ózgartiring
+3-faylni user va guruh egasini bir qator kod orqali ózgartiring
+14) sizda turgan umaskni ekranga chiqaring, va default permissionni formula orqali hisoblab chiqazing
+15) umaskni shunday o'zgartiringkki siz yaratgan faylni aynan sizning useringiz dan boshqaga read , write , ga ruxsat bo'lmasin
+16) Bitta umumiy papka yarating va uni biror guruhga biriktiring, hamda bu guruhga 3 ta userni a'zo qiling, shunday huquq beringki bu papka ichida userlar faqat o'zlari yaratgan papkani o'chirolsin.
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum, 
+Vazifa:
+1. sistemaga yangi 2 ta disk qo'shish, uni 2tadan ta razdelga ajratib, formatlab (ext3,ext4,ntfs,fat32),  fayl sistemaga mount qilish, birinchi diskni (gpt) ikkinchi diskni (mbr, 1 ta primary 1 ta logical) . fdiskda qigan ishlarzni rasmga olish, disklani mount bolganini tekshirib rasmga olish,. show komandalani hammasini ishlatib ko'rish, rasm hammasiga. df, lsblk, blkid, mount. 
+mount qilingan razdellani fstab ga qo'shish(rasm), reboot berib sinab ko'rish (umount -a , mount -a).
+2. Yangi disk qo'shish va unda 13GB lik ext4 razdel yaratish. Yaratilgan razdelni sistemaga mount qilish va unga malumot yozish. Keyin razdelni bir marta hajmini oshirib va bir marta hajmini kamaytirib ikkala holatni ham  df bn tekshirish va malumot saqlanganganini ls bn tekshirish.
+3. Sistemaga bir razdelni read-only qilib ulash va sinab ko'rish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum, Vazifa: Quyidagi sistemalarni órnatish:
+1. debian 
+a) legacy BIOS, raid 5, / va /home alohida  
+b) UEFI , raid1, / 
+2. Ubuntu 
+a) Legacy BIOS, raid 10, /
+b) UEFI,  raid 1, / va /var alohida
+3. Amlalinux 
+a) Legacy BIOS, raid 0,  /
+b) UEFI, raid 1, / va /srv alohida
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+1. Raid qilinmagan oddiy  sistemada:
+ a) 2 ta 15G disk qóshish va birinchi diskni  10G va 5G qismlarga ajratish(MBR)
+b)  2-diskka razdelllash tablitsasini clone qilish 
+c)  2 ta 10G dan raid 1 hosil qilish. 2 ta 5G dan raid 0 hosil qilish. hosil bolgan raidlarni formatab biror papkaga biriktirish va ichiga malumot yozish.
+d) o'zgarishlarni doimiy qilib saqlash va reboot berib raid va mount holatini tekshirish
+ e) Raid 1 dan bitta diskni fail qilib , raiddan óchirish va yana qayta raidga qóshish.
+f) Raidni stop qilish va qayta ishga tushirish. Sistemaga reboot berish va raid qayta yonganini tekshirish
+2. Barcha raid ga órnatilgan sistemalarda (debian, ubuntu, almalinunx) kamida bittadan diskni olib tashlash (agar avval olib tashlanmagan bolsa). yangi disk qóshish va boshqa diskdagi razdel tablitsani yangi diskka clone qilish va raidni qayta tiklash va yangi qóshilgan disklarga bootloader órnatish. Yangi qo'shilgan disklarni razdellashda sfdisk va sgdisk dan foydalanish
+3. Raid ustiga o'rnatilgan sistemalardan birida raid ni hajmini kichraytirish
+4. sistemaga 2 ta disk qo'shish, va birinchi diskni GPT qilib formatlab unda razdellar yaratish, va undagi razdel tablitsani 2-diskka ham ko'chirish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+
+1. Intel va HPE serverlarida:
+a) Hardware raid orqali  raid 0, 1, 5, 10, 6 virtual disklar yaratish, spare device sozlash.
+b) BCM sozlash, yangi IP . user , parol qo'yish. Masofadan o'chirib yoqish. Masofadan Monitorga ulanish,Masofadan ISO obrazni biriktirish va sistema o'rnatish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+
+1. debian, ubuntu va almalinux sistemalarini lvm ustida ko'tarish:
+lvs , pvs , vgs 
+df -h 
+komanda natijalarini screenshot qilib tashlash
+
+2. Oddiy (lvm yoq) sistemaga 2 ta disk qo'shish va ulardan lvm guruh yaratish. data va server nomli logical volumelar yaratish va ularni formatlab sistemaga mount qilish
+
+3.data volume ni :
+a) hajmini kattalashtirish
+b) kichraytirish 
+
+4. LVM da ko'tarilgan sistemada root volumedan snapshot olish va sistemada o'zgarishlar qilib snanshot orqali avvalgi holiga qaytarish
+
+5. LVM da qilingan sistemaga  yangi fizik disk qo'shish, uni gurpaga qo'shish  va root volumeni shu diskka ko'chirib o'tkazish
+
+6. LVM gurpadagi bo'sh diskni lvm guruhdan chizaqib tashlash
+(ko'rsatma: vgreduce guruh-nomi fizik-disk )
+
+7. software raid ustida lvm ko'tarish va debian sistemasini o'rnatish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: II.
+1.  NFS server sozlash va nfs clientdan turib ruchnoy mount qilish serverga, keyin uni ham fstabga qo'shish . o'zaro malumot almashib natijani ikkovi serverda ham ko'rish va reboot berib sinab ko'rish.
+2. NFS clientga nat orqali ulanishga ruxsat berish (Option: /etc/exports da:  insecure)
+3. NFS orqali ulanganda client va serverdagi root userlarni umumlashtirish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum vazifa:
+
+1) Virtualboxda openssh-server o'rnatish, va unga ssh orqali ulanish. Putty va ssh cli dan.
+ 2) ssh serverda bazi parametrlarni o'zgartirish va sinab ko'rish:
+a) ssh ni 622- port orqali ewitadigan qilib sozlash va yana 22-portga qaytarish
+3) o'ziz turgan linuxdan scp orqali  virtualboxga malumot tashlash (a) bitta fayl, b) bitta papka )
+4) virtualboxdan o'ziz turgan linuxga scp orqali ga malumot tashlash (a) bitta fayl, b) bitta papka )
+5) rsync orqali hamma ózidagi biror papkani ichidagi narsalari bilan virtualboxga /data ga tashlash (virtualbpxdagi serverda /data degan papaka ochib).
+Óziz turgan linuxdagi papkaga yangi fayl qóshish va yana bir marta serverga tashlab tezlikni tekshirib kórish (speedup ni ko'rish)(quyidagi optionlarni ishlatish: -r,-a,-P,-v,-z, --exclude )
+6) rsync orqali biror papkani ichidagi fayllaridan ayrimlarini exclude qilib, serverga tashlash va natijani tekshirish(a. to'liq path ni ko'rsatib, b. bog'liq pathni ko'rsatib)
+7  rsync orqali ushbu "/" belgini 2 xil holatini ishlatish va natijani ko'rish.
+
+8) virtualboxdagi sshdni 822 - portdan ewitadigan qilib nastroyka qilish, virtualboxdagi linuxga parolsiz, ssh-kalit bilan ulanadigan qilish (o'zizdagi linuxadan yoki boshqa virtualboxdan turib). Key yaratayotganda a) rsa 4096 bit, b) ed25519 algoritmidan foydalanish.  Hamda 2-dan 7-gacha bo'lgan topshiriqni parolsi, ssh keyni ko'rsatgan holda va 822 port uchun qayta bajarish.
+
+
+9) nfs orqali biror server papkasini boshqa serverga mount qilish va o'sha mount qilingan papkaga tar orqali etc papkani arxivlab backup olish.
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum, vazifa:
+1)Cronjob yozish, 
+A)har reboot berilganda sitemadagi vaqtni qaysidur faylga yozadigan
+B) har 5 minutda birorta papka va uni ichidagi barcha fayllaga 777 pravila beradigan 
+C) har dushaba soat 7 da /etc papka va uni ichidagia hamma fayllani home papkaga saqlab turadigan
+2) script yozish , shell va pythonda, odam bilan salomlashadigan ismini aytib.
+3) sitemaga ulangan userlar róyxatini biror faylga yozadigan script yozish,python va shell script. Va ularni crontabga qóshish har 15 daqiqada ishga tushadigan qilib.
+4) sistemadagi crobjoblarni róyxatini chiqarish, biror user uchun crontabni tozalash.
+5) qaysidur userlar uchun crontab yozishni cheklash, va sinab kórish.
+6) har yanshanba 6:00 da sistemadagi etc papkadan nusxa olib home papkayzga ect papaka nomiga bugungi sana va vaqtni biriktirgan holda saqlash
+7)  dushanba , chorshanba va shanba kunlari soat 7:35 va 7:45 ishga tushadigan komanda yozish
+[8/19/25 12:58 PM] Istam Ilmuz Admin: 8) 
+a). har kunni yarmida o'zingizni home directoriyangizdan uch kun ichdagi 10M dan katta  bo'lgan va formati  .tar.gz yoki .rar yoki .zip ko'rinishdagi faylarni o'chiruvchi cron yozing.
+b). har yakshanba soat kechasi 12ga qadar o'zingizni home directoriyangizdan uch kundan avval 10M dan kichik  bo'lgan papkalarni  o'chiruvchi cron yozing.
+[8/19/25 12:58 PM] Istam Ilmuz Admin: malumotni qidirib òchirish uchun, 
+
+find /path [option] -detele
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum, vazifa:
+1) apt komandalarini har birga kamida 3 tadan komanda yozish
+apt 
+        update
+        upgrade
+        list --upgradable
+        full-upgrade
+        search <^pack-name$>
+        install <pack-name> 
+        remove <pack-name>
+        purge <pack-name>
+        autoremove
+        --purge autoremove
+        show <pack-name>
+        list 
+        list | grep <something>
+        list --installed
+        depends <pack-name>
+        edit-source
+        install /path (tg://bot_command?command=path)/<package.deb>
+apt-mark    
+            hold <pack-name>
+            unhold <pack-name>  
+ Ishlatish uchun packetlar nomi: htop, nginx, nfs-kernel-server, openvpn, haproxy, tree, traceroute, nmap, net-tools, openssh-server, curl
+
+ 2) virtualboxda o'rnatilgan linuxda, qanday repositoriyalar qo'shilganini aniqlash va barchasini rasmga olish
+ 3) dpkg -i (--install) appname.deb
+ -r(--remove)
+ -P(--purge)
+ --help
+ komandalarini ishlatish. wget yoki curl orqali biror packetni download qilish va o'rnatish
+ 4) rpm -i appname.rpm
+rpm -U appname.rpm
+rpm -e appname      
+rpm -q appname
+komandalarini centosda ishlatish. curl yoki wget orqali packetlarni download qilish va sistemaga o'rnatish. packetlar :htop, xz-utils, bzip2, rar, nmap
+5) yum   
+    install
+    remove
+    update
+    list
+    search
+    info
+    list installed
+    install /path (tg://bot_command?command=path)/<package.rpm>
+ushbu komandalarga 2 tadan komanda yozish.
+6). Virtualboxda o'rnatilgan debian 11 sistemangizni debian 12 sistemasiga ko'tarish.
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+
+1) sistemadagi progresslarni ko'rsatish:
+a) sizni terminaldagi
+b) barcha terminallardagi
+c) sistemadagi barcha
+d) kengaytirilgan holatda (qaysi user tomonidan ishga tushgan)
+e) user id bo'yicha filterlab
+f) user name bo'yicha filterlab
+g) process id bo'yicha filterlab
+e) process nomi bo'yicha filterlab
+2) Biror nomli processni faqat id sini ekranga chiqarish
+3) biror process ni tóxtatish: 
+a) ID si bo'yicha , process o'zini o'zi to'xtatish buyrug'i bilan
+b) ID si bo'yicha , processni sistema orqali to'xtatish buyrug'i bilan
+a) Nomi bo'yicha , process o'zini o'zi to'xtatish buyrug'i bilan
+b) Nomi bo'yicha , processni sistema orqali to'xtatish buyrug'i bilan
+4) biror process ni ishlab turganini tekshirish, lekin signal jo'natmasdan:
+a)process id si bóyicha
+b)nomi bo'yicha. 
+5) biror processni amalga oshirish va klaviatura orqali butunlay to'xtatish.
+6) biror processni amalga oshirish va klaviatura orqali vaqtincha to'xtatish va:
+a) orqa fonda davom ettirish
+b) oldi fonda davom ettirish
+7) sistemada biror scriptni orqa fonda ishga tushirish va outputni nohub orqali faylga yozib qo'yish. 
+8) sistemada RAM qancha ishlayotganini ekranga chiqaradigan 3 ta komandani yozish
+9)service yozish 2 ta, service ni ichiga bir marta python bir marya shell script bilan. Ularni ishga tushirish, reboot dan keyin avtomatik yonadigan qilish, va statusini tekshirish. Service larni birini ikkinchisiga bog'liq qilib nastroyka qilish, bittasi ishga tushmasa boshqasi ham ishga tushmasin. Tekshirib ko'rish.  Servicelarni stop, start, restart , disable enable qilib natijani tekshirish. 
+10) sistemadagi barcha servicelarni ekranga chiqarish
+11) sitemada ishlab turgan(running) service lani ekranga chiqarish (filter orqali)
+[8/19/25 12:58 PM] Istam Ilmuz Admin: Assalomu aleykum. Vazifa:
+1. Darsdagi topologiyani yaratish, uyerda 10 lik tarmoqqa 1 ta debian va 1 ta ubuntu qurilmasini  va 192 lik tarmoqqa ham 1 ta debian va 1 ta ubuntu qurilmasini qo'shish.
+2. ip komandalaridan foydalanib ularga ip/maska/gateway/static-route berish. dns ni sozlash. 
+natijalarni ping bilan tekshirib ko'rish. hamda berilgan ip va routelarni o'chirib sinab ko'rish. ARP  tablitsani ekranga chiqarish
+3. ip link komandasidan foydalanib biror interface ni o'chirish va yoqish. up bolgan interface larni ekranfga chiqarish.
+4.  debian va u ubuntularda hamma qurilmada network sozlamasini doimiy qilib sozlash va sinab ko'rish. har bitta qurilmaga 2 tadan IP berish.

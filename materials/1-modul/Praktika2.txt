@@ -1,0 +1,42 @@
+Praktika 2 
+
+1-bo'lim
+
+1) user1 user2 user3 nomli userlar yaratish (home dir, /bin/bash shell  va ism familiyasi bilan) , ularga parol berish  va ularni sudo gurpaga qo'shish
+2) linux deb nomlangan guruh yaratish, hamda userlarni shu gurpaga qo'shish
+3) user2 va user3 ni sistemaga bog'lanishini blocklab qo'yish, user3 ni blocklashni bekor qilish 
+4) user2 ni parolini o'zgartirish
+5) /etc/passwd /etc/shadow fayllardan faqatgina siz yaratgan userlar ro'yxatini chiqaradigan komandani yozing(filterlash)
+6) /etc/passwd fayldagi ro'yxatni alifbo tartibida chiqarish
+7) fayl yaratish , faylni ichiga va uni pravalarini kórish(r,w,x), user2 uchun siz yaratgan papka uchun hamma huquqni bering, qolgan barcha uchun faqatgina o'qishga huquq bering
+8) /etc/ dagi barcha fayllar róyxatini pravalari bn ekranga chiqarish
+9) 5 ta fayl yarating va ularga 777, 757, 765, 664, 722 huquqlarni harflar orqali bering(r,w,x kabi)
+10) 3 ta fayl yarating va ularga , rw-rw----, r--r-----, rwx--x--x,  r-xr-xr--, ushbu huquqlarni raqamlar orqali bering
+
+##################
+
+2-bo'lim
+
+1) virtualboxda 3 ta 1GB disk qo'shish va ulardan raid5 yaratish reboot berib tekshirish
+2) raid5 dan bitta diskni fail qilib olib tashlash va olib tashlangan disk o'rniga boshqa disk qo'shish
+3) serverda hardware raid1 raid5 raid0 hosil qiling
+4) sistemada 2 ta 4GB disk qo'shish, bittasini fdisk bilan 1GB va 3GB razdellarga bo'lish hamda ext4 va fat32 qilib format qilish, hamda sistemada mount qilish, ikkinchi diskni parted bilan 1.5GB va 2.5GB razdellarga bo'lish va ext3 va ntfs formatga sistemaga mount qiling, mount qilingan disklarni fstabga yozish rebootdan keyi tekshirib ko'rish
+5) NFS server va client sozlash ,ruchnoy mount qilish va fstabga yozish , rebootdan keyin tekshirish
+
+###################
+
+3-bo'lim
+
+1) Crontab yozish:
+	a) Har kuni soat 6 00 da sitemadagi packetlarni obnavleniya qiladigan
+	b) har hafta seshanba kuni /etc papkadan /Backup papkaga kopiya olish (cp bilan)
+	c) sistemadagi cronjoblarni ro'yxatini ekranga chiqarish
+2) python va bash script yozish odam bilan salomlashadigan
+3) sistemadagi hamma processlarni kórsatish, full holatda.
+4) Processlar orasidan bizga kerakla process ni nomi bóyicha ajratib olish
+5) biror process ni tóxtatish, process id si bóyicha. 
+6) biror processni zudlik bilan tóxtatish, process id si bóyicha.
+7) sistemada biror packetni yuklashni nohup orqali background da ishga tushirish, va undan chiqqan natijani cat orqali kórsatish
+8) sistemadagi barcha service larni erkarnga chiqarish
+9) bash script yozish va uni service ga qo'shish, uni ishga tushirish, rebootdan keyin avtomatik yonadigan qilish va statusini tekshirish
+10) virtualkada openssh-server o'rnatish , uni 922-portdan ewitadigan qilish va unga avtomatik kirish uchun ssh kalit ni export qilish va ulanib tekshirib ko'rish.

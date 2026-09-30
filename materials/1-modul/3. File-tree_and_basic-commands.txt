@@ -1,0 +1,16 @@
+PLAN
+
+#Linux distro family (debian vs Redhat) 
+	https://www.tecmint.com/redhat-vs-debian-administrative-point-of-view/
+
+#Using putty to connect linux.
+
+#Linux file tree hierarchy 
+https://www.linux.com/training-tutorials/linux-filesystem-explained/
+/bin, /boot, /dev, /etc, /home, /lib, /media, /mnt,  /opt, /proc, /root, /run, /sbin, /usr, /srv, /sys, /tmp, /var
+
+#working with directories:
+ls, tree, pwd, cd, absolute and relative paths, path completion,mkdir, rmdir
+
+#working with files:
+file, case sensitive, everything is a file,  touch, rm, cp, mv, 

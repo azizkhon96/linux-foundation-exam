@@ -1,0 +1,3 @@
+1. NFS, mount, LVM, raid
+2. Raidni kesish
+3. BIOS/GPT debian o'rnatish

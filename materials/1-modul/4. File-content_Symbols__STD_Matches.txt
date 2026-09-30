@@ -1,0 +1,34 @@
+PLAN (2nd edition)
+
+
+	working with file contents:
+head, tail, cat, tac,  less, more
+
+echo 
+
+
+	some symbols in cli:
+'' 	"" 	;	&,		#	\  \n	\t	 &&	||
+
+$    (env, printenv VARIABLE_NAME, echo $varname, export JAVA_HOME=/usr/bin/java, source .bashrc, $PATH, export)
+
+"" parse variables, '' - get only text
+
+File globbing
+
+	Pattern Matching file globbing and outputting:
+*	Match zero or more characters  0 dan kopgacha 
+?	Match any single character 
+[]	Match any of the characters in a set
+[!] NOt Match any of the characters in a set
+
+
+
+STD:
+
+>	>>  2>&1   tee
+
+
+	some useful commands:
+	 which,	 alias, unalias
+

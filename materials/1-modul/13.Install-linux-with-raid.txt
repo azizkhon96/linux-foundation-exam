@@ -1,0 +1,8 @@
+Lesson PLAN: RAID (Redundant Array of Independent Drives)
+	
+	Overview 
+		- RAID levels (0,1,5,6,10)
+		- Software raid, hardware raid, JBOD (Just bunch of disks)
+	Installing ubuntu 20.04 on raid(software raid)
+	Installing Centos 7 on raid (software raid)
+	Hardware raid (on real server)

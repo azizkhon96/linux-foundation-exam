@@ -1,0 +1,52 @@
+PLAN.(Extended)
+
+	Linux history
+		Unix history
+		GNU project
+		Linux Kernel
+
+	Main Terms:
+		Operating System
+		Kernel
+        Driver
+		application
+
+    Linux OS architecture (brief)
+
+    Linux vs Windows
+
+    Linux Distros
+
+
+        
+
+
+        Links to read:
+
+    Linux vs Windows:
+https://www.edureka.co/blog/linux-vs-windows/
+
+    Linux advantages over windows:
+https://medium.com/swlh/13-reasons-why-linux-is-better-than-windows-6fa304454ae
+https://itsfoss.com/linux-better-than-windows/
+https://www.linuxandubuntu.com/home/10-reasons-why-linux-is-better-than-windows
+
+    Linux ditribution overview:
+https://www.linuxtrainingacademy.com/linux-distribution-intro/
+
+    List of Linux distros:
+https://en.wikipedia.org/wiki/List_of_Linux_distributions#cite_note-100
+
+    Linux architecture:
+https://www.elprocus.com/linux-operating-system/
+
+    Kernel wiki:
+https://en.wikipedia.org/wiki/Kernel_(operating_system)
+
+    OS vs Kernel:
+https://www.geeksforgeeks.org/difference-between-operating-system-and-kernel/
+
+    Kernel vs Driver
+https://www.gamedev.net/forums/topic/645362-difference-between-kernel-and-driver/
+
+

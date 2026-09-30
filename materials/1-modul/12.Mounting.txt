@@ -1,0 +1,54 @@
+Lesson Plan (04.10.2021)
+
+#Installing :
+	apt install fdisk gdisk parted
+	
+#Partitioning
+	parted /dev/sdX
+ 	mkpart primary ext4 0.0 2048	#in MB
+	mkpart primary ext4 0% 40%		#in percentage	
+
+#Formatting
+	apt install dosfstools			#vfat formatter
+	apt install ntfs-3g				#ntfs formatter	
+
+	mkfs.ext4 /dev/sdXN		#format ext4 FS on partition
+	mkfs.ntfs /dev/sdXN		#format ntfs FS on partition		#Option: -f fast
+	mkfs.vfat /dev/sdXN		#format fat32 FS on partition
+	
+#check part and fs
+	lsblk, lsblk -f, lsusb, mount, df , blkid
+
+#make mount permenant		
+		/etc/fstab  (defaults = rw, suid, dev, exec, auto, nouser, and async.)(ro, noexec, noauto, user, sysc )
+		findmnt dev|mountpoint, df,
+		umount dir|dev (-f)
+
+#Resize partition and FS
+	Umount first
+	fdisk /dev/sdXN; delete and create again (!!! USE PREVIUS START SECTOR, !!! DON'T shrink smaller than data )
+	e2fsck -f /dev/device
+	resize2fs /mount/device node		#can increase when mounted	(ext2/ext3/ext4), K — kilobytes M — megabytes G — gigabytes
+	resize2fs /dev/device size			#decrease when unmounted
+	
+
+NFS (Network File Share)
+		in server:
+			install nfs-kernel-server, (on centos install nfs-utils, nsf-kernel-server)
+			create export directory, set permission nobody:nogroup, 777
+			edit /etc/exports, exportfs -a, restart nfs-kernel-server, 
+		in client:
+			install nfs-common (on centos nfs-utils)
+			mount -t nfs server-ip:/dir /local-mount
+			in fstab : server-ip:/export-folder /local-mount nfs default 0 0
+
+
+	Useful resources:
+https://devconnected.com/how-to-mount-and-unmount-drives-on-linux/ 	#mounting in linux
+https://help.ubuntu.com/community/Fstab		#fstab mounting options
+https://cloud.netapp.com/blog/azure-anf-blg-linux-nfs-server-how-to-set-up-server-and-client #nfs
+https://averagelinuxuser.com/how-to-format-bootable-usb-to-normal/
+
+https://geek-university.com/linux/etc-fstab-file/
+
+https://www.msp360.com/resources/blog/linux-resize-partition/#:~:text=The%20primary%20way%20of%20resizing,to%20fit%20the%20new%20bounds.

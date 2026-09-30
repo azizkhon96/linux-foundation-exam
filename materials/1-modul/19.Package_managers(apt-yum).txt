@@ -1,0 +1,69 @@
+	####	Package Maganers	####
+
+#apt 
+
+	apt 		
+        update	 			#menuni yangilash
+        upgrade				#
+        list --upgradable
+        full-upgrade
+        search <^pack-name$>
+        install <pack-name> 
+        remove <pack-name>
+        purge <pack-name>
+        autoremove
+        --purge autoremove
+        show <pack-name>
+        list 
+        list | grep <something>
+        list --installed
+        depends <pack-name>
+        edit-source
+		install /path/<package.deb>		#local installation
+	
+	apt-mark    
+            hold <pack-name>
+            unhold <pack-name>
+
+#yum or dnf
+
+	yum 	
+		install
+		remove
+		update     = apt upgrade
+		list
+		search
+		info       = apt show
+		list installed
+		install /path/<package.rpm>		#local installation
+
+	yum install dnf		#install dnf	
+
+
+
+#dpkg:
+			dpkg -i (--install) appname.deb, -r(--remove),-P(--purge), --help
+
+#rpm
+				rpm -i appname.rpm		#install
+				rpm -U appname.rpm			#upgrade
+				rpm -e appname			#erase
+				-q 		#query package exist or not
+				-v 		#verbose  	-vh  #show hash marks while installation
+				-qi		#query info
+			
+#install from source:
+sudo apt install libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc curl	#install packages which needed for buiding process
+			https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.26.2.tar.gz
+			command step:  
+				cd dir/
+				./configure
+				make
+				sudo make install
+
+
+#Useful links:
+	https://www.linux.com/news/how-install-packages-source-linux/	#make
+	https://opensource.com/article/18/8/how-install-software-linux-command-line	
+	https://ubuntu.com/server/docs/package-management
+	https://medium.com/geekculture/5-different-ways-to-install-software-on-ubuntu-linux-14ae6b95d1d2

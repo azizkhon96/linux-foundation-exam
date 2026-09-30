@@ -1,0 +1,98 @@
+1) Home direktoriyangizda quyidagi direktoriya va fayllarni yarating, janrlar - direktoriya ,kitob nomlari - fayl.
+
+a)
+kitoblar/
+├── afsona
+│   ├── olmos_tosh
+│   ├── suv_parilari
+│   └── yashirin_orol
+├── ertak
+│   ├── bilmasvoyning_sarguzashtlari
+│   ├── bugirsoq
+│   ├── echki_bolalari
+│   └── sariq_devni_minib
+├── fantastik
+│   ├── batman
+│   ├── robot
+│   └── urgimchak_odam
+└── roman
+    ├── graf_monte_kristo
+    ├── ikki_eshik_orasi
+    └── temir_niqob
+b) home direktoriyangizda dir1/dir2/dir2/dir4 ichma-ich direktoriyalarni bitta komanda bn yarating
+c) tree comandasidan foydalanib root (/) direktoriyasi ichidagi har bir direktoriyaning 1 qatlam va 2 qatlam ichki fayllarini ko'rsating
+
+2) kitoblar nomli direktoriyani kitoblar2 degan nom bn home direktoriyangizga kopirovat qiling va quyidagi o'zgartirishlarni bajaring:
+
+    a) ertak degan papkani o'chiring
+    b) fantastik ni  roman degan papkani ichiga fantastik2 deb nomlab kopirovat qiling
+    c) afsona degan papkani afsonalar deb qayta nomlang
+    d) yashirin_orol faylini roman degan papkaga ko'chiring
+	e) tree comandasidan foydalanib kitoblar va kitoblar2  direktoriyasi ichidagi hamma fayllarini ko'rsating
+
+3) path bn ishlash: 
+    a) home direktoriyangizdan turib roman degan papkani ichiga absolute va relativ path orqali o'ting
+    b) relativa path orqali bitta orqadagi papkaga o'ting
+    c) bitta oldin siz turgan direktoriyaga qaytaruvchi komandani yozing
+    d) 3 ta simvolni bosib home direktoriyangizga qayting
+    e) siz hozirda turgan direktoriyangizni ekranga chiqaring 
+
+4) Ro'yxatlar bn ishlash:
+
+    a) root direktoriyadagi yani / bundagi barcha fayllar ro'yxatini ekranga chiqaring
+    b) root direktoriyadagi barcha (yashirin ham) fayllar ro'yxatini kengaytirilgan holda, va odamga o'qishi uchun tushunarli fomatda ekranga chiqaring
+    c) O'ziz turgan direktoriyadan turing  /etc dagi fayllar ro'yxatini ekranga chiqaring
+    d) O'ziz turgan direktoriyadan turing /sys va /var dagi fayllar ro'yxatini ekranga chiqaring
+    e) /boot dagi fayllar ro'yxatini odam tushunadigan formatda ekranga chiqaring
+
+5) fayl ichidagi malumotlar bn ishlash 
+    a) /etc/passwd, /etc/group, /etc/crontab, /etc/hosts fayllarni hammasini , boshlang'ich 10 qatorini , oxirgi 10 qatorini, boshlangich 15 qatorini va oxirgi 5 qatorlarini ekranga chiqaruvchi komandalarni yozing. ushbu fayllarni cat, less va more orqali ham ekranga chiqaring.
+
+6) operator va simvollar bn ishlash:
+
+    a) ushbu satrni echo yordamida ekranga chiqaring (qo'shtirnoq va birtirnoq ishlatmasdan):
+		Salom bu maxsus belgilar: & / \ * ( ) % '
+    b) yozgan komadangizga kommentariya yozing
+    c) echo komandasida tab qo'shish va yangi satrdan  yozish komandalarini ishlating va natijani ekranga chiqaring
+    d) bir qator buyruq bn 4 ta komandani ishga tushiring
+    e) agar birinchi komanda ishlasa ikkinchisi ham ishlasin, agar birinchi komanda ishlamasa ikkinchisi ham ishlamasin
+    f) agar birinchi komanda ishlasa ikkinchi komanda ishlamasin, aksincha birinchisi ishlamasa ikkinchisi ishlasin
+    g) /etc dan a harfidan  dan boshlangan fayllar ro'yxatini chiqaring
+    h) /etc da .conf bilan tugagan fayllar ro'yxatini chiqaring 
+    i) /etc dagi barcha fayllar ro'yxatini chiqarib uni etc.txt deb nomlangan faylga yo'naltiring
+    j) / ushbu papkadagi fayllar ro'yxatini chiqarib uni etc.txt ni ichiga  qo'shib qo'ying (oldingi malumotlarni davomidan)
+    k) alias orqali komanda yarating, salom deb yozsayz Assalomu aleykum deb ekranga chiqarsin
+    l) ls cd pwd komandalarining binarny fayllari qaysi papkadaligi chiqarib beruvchi komanda yozing
+    m) /etc ni  va /etc/fstab ni fayl tipini(fayl tiplari: text fayl, video, auido, direktoriya) ekranga chiqaring
+
+7) editors:
+	7.1)	a)nano orqali yangi fayl ochish
+			b)unga 4 qator matn yozish va matnni to'liq kopirovat qilib 2 marta matnni pastgi qismiga tashlash
+			c)oxirgi qatordan 2 qator yangi matn yozish va uni kesib olib eng yuqori qatorga tashlash
+			d)matndan biror so'zni islash va izlanayotgan so'zni keyingisini izlash
+			e)fayl ichida /etc/os-release degan faylni o'qib olish va saqlab chiqib ketish.
+   
+  7.2)  a) vim orqali fayl ochish
+		b) 4 qator mant yozish va saqlab chiqib ketish
+    	c) Qayta o'sha faylni vim bn ochish va undan turib /etc/os-release faylini o'qib olish
+		d) tree orqali kitoblar degan papka strukturasini fayl ichiga chiqarish, faylga bugungi sanani va kalendarni chiqarish
+    	e) Fayldan biror so'zni yuqoridan pastga va pastdan yuqoriga qarab izlash 
+		f) fayldagi biror so'zni boshqa so'zga aylantirish  hammasini
+		g) fayldan boshidan 3 qatorni kesib olib faylni pastgi qatoriga tashlash, faylni o'rtasidan 2 qatorni kopirovat qilib faylni pastgi qatoriga tashlash
+ 		h) yuqoridagi 4 qatorlik matnni satrlari o'rtasiga kursorni oborib , 1- va 2- qatorlarni kursordan o'ng qismini , 3- va 4- qatorlarni kursordan chap qismini o'chirish
+		i) kursorni satr boshiga va oxiriga oborish, kursorni qator boshiga, oxiriga va 12-qatorga oborish
+		j) fayl qatorlarini raqamlash, fayldan chiqib ketmasdan saqlash va faylni boshqa nom bn saqlab chiqib ketish. 
+
+8) Linux.zip faylni ko'chirib olish va arxivdan ochish. arxiv va tayyor degan papkalar yaratish. Va ular ichida gzip va zstd degan papkalar yaratish. 
+    a) arxivdan ochilgan papkani  arxiv degan papkaga tar gzip va zstd  algoritmlari orqali arxivlab tashlash
+    b) arxivlagan malumotlarni tayyor degan papkaga arxivdan yechib tashlash
+    c) arxivlangan  faylni ochmay turib ichidagi fayllarni ko'rish 
+
+1) 1 ball
+2) 0.5 ball
+3) 1 ball
+4) 0.5 ball
+5) 0.5 ball
+6) 2.5 ball
+7) 2 ball
+8) 2 ball
