@@ -12,6 +12,14 @@
 #   sudo ./provision_students.sh -n 5 -p talaba       # talaba1..talaba5
 #   sudo ./provision_students.sh -n 10 --dist /path/to/dist
 #
+# Agar 'dist/' ni tuzatib (masalan pyarmor build muammosidan keyin) qayta
+# qursangiz, ALLAQACHON YARATILGAN userlarning imtihon materialini
+# yangilash uchun --refresh qo'shing (parol/user O'ZGARMAYDI, faqat
+# module1-exam/ qayta nusxalanadi, talabaning ~/javoblar va ~/.exam
+# holati SAQLANIB QOLADI):
+#   sudo ./provision_students.sh --refresh user1 user2
+#   sudo ./provision_students.sh --refresh -n 5 -p talaba
+#
 # Talab qilinadi: root (sudo) huquqi.
 
 set -euo pipefail
@@ -21,6 +29,7 @@ DIST_DIR="$SCRIPT_DIR/dist"
 PREFIX="student"
 COUNT=0
 USERNAMES=()
+REFRESH=0
 
 usage() {
     grep '^#' "$0" | sed 's/^#//' | sed '1,2d'
@@ -32,6 +41,7 @@ while [[ $# -gt 0 ]]; do
         -n) COUNT="$2"; shift 2 ;;
         -p|--prefix) PREFIX="$2"; shift 2 ;;
         --dist) DIST_DIR="$2"; shift 2 ;;
+        --refresh) REFRESH=1; shift ;;
         -h|--help) usage ;;
         *) USERNAMES+=("$1"); shift ;;
     esac
@@ -90,32 +100,11 @@ gen_password() {
     echo "${w1}${w2}${digits}"
 }
 
-TS="$(date +%Y%m%d_%H%M%S)"
-CRED_FILE="$SCRIPT_DIR/credentials_${TS}.txt"
-: > "$CRED_FILE"
-chmod 600 "$CRED_FILE"
-
-printf "%-16s %-16s %s\n" "USER" "PAROL" "HOLAT" | tee -a /dev/null
-printf "%-16s %-16s %s\n" "----" "-----" "-----"
-
-declare -A SEEN_PASSWORDS
-
-for user in "${USERNAMES[@]}"; do
-    if id "$user" &>/dev/null; then
-        printf "%-16s %-16s %s\n" "$user" "-" "MAVJUD, o'tkazib yuborildi"
-        continue
-    fi
-
-    password="$(gen_password)"
-    while [[ -n "${SEEN_PASSWORDS[$password]:-}" ]]; do
-        password="$(gen_password)"
-    done
-    SEEN_PASSWORDS["$password"]=1
-
-    useradd -m -s /bin/bash "$user"
-    echo "${user}:${password}" | chpasswd
-    usermod -aG sudo "$user"
-
+# exam materialini (dist/) berilgan userning uyiga joylaydi va
+# .bash_profile orqali avtomatik boshlashni sozlaydi. Parolga tegmaydi --
+# yangi user yaratishda ham, mavjud userni --refresh qilishda ham ishlatiladi.
+install_materials() {
+    local user="$1" home exam_dir profile
     home="/home/$user"
     exam_dir="$home/module1-exam"
 
@@ -136,12 +125,55 @@ if [ -z "\${MODULE1_STARTED:-}" ]; then
     exec "$exam_dir/module1"
 fi
 EOF
+        chown "$user:$user" "$profile"
     fi
-    chown "$user:$user" "$profile"
+}
+
+TS="$(date +%Y%m%d_%H%M%S)"
+CRED_FILE="$SCRIPT_DIR/credentials_${TS}.txt"
+: > "$CRED_FILE"
+chmod 600 "$CRED_FILE"
+
+printf "%-16s %-16s %s\n" "USER" "PAROL" "HOLAT"
+printf "%-16s %-16s %s\n" "----" "-----" "-----"
+
+declare -A SEEN_PASSWORDS
+
+for user in "${USERNAMES[@]}"; do
+    if id "$user" &>/dev/null; then
+        if [[ "$REFRESH" -eq 1 ]]; then
+            install_materials "$user"
+            printf "%-16s %-16s %s\n" "$user" "-" "materiallar yangilandi (parol o'zgarmadi)"
+        else
+            printf "%-16s %-16s %s\n" "$user" "-" "MAVJUD, o'tkazib yuborildi (--refresh bilan yangilash mumkin)"
+        fi
+        continue
+    fi
+
+    if [[ "$REFRESH" -eq 1 ]]; then
+        printf "%-16s %-16s %s\n" "$user" "-" "MAVJUD EMAS, --refresh uni yaratmaydi"
+        continue
+    fi
+
+    password="$(gen_password)"
+    while [[ -n "${SEEN_PASSWORDS[$password]:-}" ]]; do
+        password="$(gen_password)"
+    done
+    SEEN_PASSWORDS["$password"]=1
+
+    useradd -m -s /bin/bash "$user"
+    echo "${user}:${password}" | chpasswd
+    usermod -aG sudo "$user"
+
+    install_materials "$user"
 
     echo "${user}:${password}" >> "$CRED_FILE"
     printf "%-16s %-16s %s\n" "$user" "$password" "yaratildi"
 done
 
 echo
-echo "Parollar ro'yxati saqlandi: $CRED_FILE (faqat root o'qiy oladi)"
+if [[ -s "$CRED_FILE" ]]; then
+    echo "Parollar ro'yxati saqlandi: $CRED_FILE (faqat root o'qiy oladi)"
+else
+    rm -f "$CRED_FILE"
+fi

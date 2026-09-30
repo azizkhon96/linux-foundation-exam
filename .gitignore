@@ -6,3 +6,4 @@ __pycache__/
 
 # talabalar paroli -- hech qachon versiya nazoratiga qo'shilmasin
 credentials_*.txt
+.buildvenv/
