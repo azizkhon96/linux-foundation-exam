@@ -20,6 +20,10 @@
 #   sudo ./provision_students.sh --refresh user1 user2
 #   sudo ./provision_students.sh --refresh -n 5 -p talaba
 #
+# Har birini QO'LDA sanashning hojati yo'q -- /home/*/module1-exam mavjud
+# BARCHA userlarni (nechta bo'lishidan qat'iy nazar) birdaniga yangilash:
+#   sudo ./provision_students.sh --refresh-all
+#
 # Talab qilinadi: root (sudo) huquqi.
 
 set -euo pipefail
@@ -30,6 +34,7 @@ PREFIX="student"
 COUNT=0
 USERNAMES=()
 REFRESH=0
+REFRESH_ALL=0
 
 usage() {
     grep '^#' "$0" | sed 's/^#//' | sed '1,2d'
@@ -42,6 +47,7 @@ while [[ $# -gt 0 ]]; do
         -p|--prefix) PREFIX="$2"; shift 2 ;;
         --dist) DIST_DIR="$2"; shift 2 ;;
         --refresh) REFRESH=1; shift ;;
+        --refresh-all) REFRESH=1; REFRESH_ALL=1; shift ;;
         -h|--help) usage ;;
         *) USERNAMES+=("$1"); shift ;;
     esac
@@ -51,6 +57,20 @@ if [[ "$EUID" -ne 0 ]]; then
     echo "Xato: bu skript root (sudo) huquqi bilan ishga tushirilishi kerak." >&2
     echo "Masalan: sudo $0 $*" >&2
     exit 1
+fi
+
+# --refresh-all: qo'lda sanashning hojati yo'q -- /home/*/module1-exam
+# papkasiga ega BARCHA userlarni o'zi topib, USERNAMES ro'yxatini to'ldiradi
+if [[ "$REFRESH_ALL" -eq 1 ]]; then
+    for d in /home/*/module1-exam; do
+        [[ -d "$d" ]] || continue
+        USERNAMES+=("$(basename "$(dirname "$d")")")
+    done
+    if [[ ${#USERNAMES[@]} -eq 0 ]]; then
+        echo "Xato: /home/*/module1-exam ga ega hech qanday user topilmadi." >&2
+        exit 1
+    fi
+    echo "Topilgan userlar (${#USERNAMES[@]} ta): ${USERNAMES[*]}"
 fi
 
 # -n berilgan bo'lsa, avtomatik nomlar generatsiya qilamiz (mavjud
@@ -69,7 +89,7 @@ if [[ "$COUNT" -gt 0 ]]; then
 fi
 
 if [[ ${#USERNAMES[@]} -eq 0 ]]; then
-    echo "Xato: kamida bitta user nomi yoki -n <son> ko'rsating." >&2
+    echo "Xato: kamida bitta user nomi, -n <son> yoki --refresh-all ko'rsating." >&2
     usage
 fi
 
